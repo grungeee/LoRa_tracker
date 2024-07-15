@@ -1,0 +1,56 @@
+#include <Arduino.h>
+#include <LoRa_E220.h>
+// |=============< LED RING >==============|
+#include <Adafruit_NeoPixel.h>
+#ifdef __AVR__
+  #include <avr/power.h>
+#endif
+
+#define LED_RING_PIN 10
+#define LEDS_COUNT 16
+#define LEDnum 1
+
+Adafruit_NeoPixel pixels(LEDS_COUNT, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
+// |=======================================|
+
+// Message counter
+//int msgCount = 0;
+
+const int buttonPin = 8; // Button connected to D8
+
+LoRa_E220 e220ttl(2, 3, 5, 6, 7);
+
+void setup() {
+
+// --------------- LED RING ----------------
+#if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
+  clock_prescale_set(clock_div_1);
+#endif
+// -----------------------------------------
+
+  //pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(buttonPin, INPUT);
+  Serial.begin(9600);
+  e220ttl.begin();
+}
+
+
+
+void loop() {
+
+  if (digitalRead(buttonPin) == HIGH) {
+// --------------- LED RING ----------------
+  //LEDnum = msgCount;
+  pixels.clear();
+  pixels.setPixelColor(LEDnum, pixels.Color(0, 255, 0));
+  pixels.show();
+// -----------------------------------------
+    e220ttl.sendMessage("Hello, World!");
+    delay(1000); // Debounce delay
+//    digitalWrite(LED_RING_PIN, LOW); // Turn off LED
+// --------------- LED RING ----------------
+  //LEDnum = msgCount;
+  pixels.clear();
+// -----------------------------------------
+  }
+}
