@@ -13,7 +13,7 @@
 #define LEDS_COUNT 16
 #define LEDindex 0
 
-Adafruit_NeoPixel pixels(LEDS_COUNT, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels(LEDindex, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
 
 // ------------| Function |-------------------
   int red[3] = {255,0,0};
@@ -99,11 +99,7 @@ z cw
 
 void loop() {
   float segment = 360/16;
-  float gxs = 40;
-  for (int i=0;i<LEDS_COUNT;i++){
-     if  (i * segment <= gxs && gxs <= (i+1) * segment){
-     LEDR_COLOR(i,purple, 500);
-    }
+  //float gxs = 40;
     int16_t ax, ay, az;
     int16_t gx, gy, gz;
 
@@ -114,6 +110,16 @@ void loop() {
     float gxs = gx / s;
     float gys = gy / s;
     float gzs = gz / s;
+
+  // ----------- LED -------------
+  for (int i=0;i<LEDS_COUNT;i++){
+    float GX_loop = gxs;
+    GX_loop =  GX_loop < 0 ? 360 - GX_loop : GX_loop;
+
+     if  (i * segment <= GX_loop && GX_loop <= (i+1) * segment){
+     LEDR_COLOR(i,purple, 500);
+    }
+  // -----------------------------
 
     Serial.print("a/g:\t");
     Serial.print(ax); Serial.print("\t");
