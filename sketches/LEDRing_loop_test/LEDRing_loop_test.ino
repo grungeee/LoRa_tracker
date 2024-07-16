@@ -62,14 +62,33 @@ pixels.show();
 
 
 void loop() {
-  float segment = 360/16;
-  float gxs = 40;
+  /*
   for (int i=0;i<LED_NUM;i++){
      if  (i * segment <= gxs && gxs <= (i+1) * segment){
      LEDR_COLOR(i,purple, 500);
     }
-}
+*/
 
+  float segment = 360/LED_NUM;
+  float gxs = 40;
+  float x = GX_loop / segment;
+
+if (x > 0) {
+  if ((int(x) - x) * (-1) < int(x) + 1 - x) {
+    LEDR_COLOR(int(x),purple, 500);
+  } else {
+    LEDR_COLOR(int(x + 1),purple, 500);
+  }
+} else {
+  GX_loop = GX_loop * (-1);
+  x = GX_loop / 22.5;
+  if ((int(x) - x) * (-1) < int(x) + 1 - x) {
+    LEDR_COLOR(int(15 - x),red, 500);
+  } else {
+    LEDR_COLOR(int(15 - (x + 1)),red, 500);
+  }
+}
+}
 
 
 
