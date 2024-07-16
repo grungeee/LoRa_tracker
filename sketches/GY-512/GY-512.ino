@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <Wire.h>
 #include <MPU6050.h>
 
@@ -10,7 +11,7 @@
 #endif
 
 #define LED_RING_PIN 10
-#define LEDS_COUNT 16
+#define LEDS_NUM 16
 #define LEDindex 0
 
 Adafruit_NeoPixel pixels(LEDindex, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
@@ -68,21 +69,23 @@ W
 MPU6050 mpu;
 
 void setup() {
-    Serial.begin(9600);
-    Wire.begin();
-    mpu.initialize();
-    if (mpu.testConnection()) {
-        Serial.println("MPU6050 connection successful");
-    } else {
-        Serial.println("MPU6050 connection failed");
-    }
 // |=============< LED RING SETUP >==============|
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
   clock_prescale_set(clock_div_1);
 #endif
-pixels.begin(); 
-pixels.clear();
-pixels.show();
+  pixels.begin(); 
+  pixels.clear();
+  pixels.show();
+
+  Serial.begin(9600);
+  Wire.begin();
+  mpu.initialize();
+  if (mpu.testConnection()) {
+      Serial.println("MPU6050 connection successful");
+  } else {
+      Serial.println("MPU6050 connection failed");
+  }
+
 // |=============================================|
 
 // |===================< HMS >===================|
@@ -98,8 +101,8 @@ z cw
 */
 
 void loop() {
-  float segment = 360/16;
-  //float gxs = 40;
+
+
     int16_t ax, ay, az;
     int16_t gx, gy, gz;
 
@@ -111,15 +114,28 @@ void loop() {
     float gys = gy / s;
     float gzs = gz / s;
 
-  // ----------- LED -------------
-  for (int i=0;i<LEDS_COUNT;i++){
-    float GX_loop = gxs;
-    GX_loop =  GX_loop < 0 ? 360 - GX_loop : GX_loop;
+  // ----------- LED 2 -------------
+  float segment = 360.0 / LEDS_NUM;
+  float GX_loop = gxs * 1;
+  GX_loop = 40.0;
+  float x = GX_loop / 22.5;
 
-     if  (i * segment <= GX_loop && GX_loop <= (i+1) * segment){
-     LEDR_COLOR(i,purple, 500);
+  if (x > 0) {
+    if ((int(x) - x) * (-1) < int(x) + 1 - x) {
+      LEDR_COLOR(int(x),purple, 500);
+    } else {
+      LEDR_COLOR(int(x + 1),purple, 500);
     }
-  // -----------------------------
+  } else {
+    GX_loop = GX_loop * (-1);
+    x = GX_loop / 22.5;
+    if ((int(x) - x) * (-1) < int(x) + 1 - x) {
+      LEDR_COLOR(int(15 - x),red, 500);
+    } else {
+      LEDR_COLOR(int(15 - (x + 1)),red, 500);
+    }
+
+
 
     Serial.print("a/g:\t");
     Serial.print(ax); Serial.print("\t");
