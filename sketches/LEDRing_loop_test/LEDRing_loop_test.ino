@@ -7,10 +7,10 @@
 #endif
 
 #define LED_RING_PIN 10
-#define LEDS_COUNT 16
+#define LED_NUM 16
 #define LEDindex 0
 
-Adafruit_NeoPixel pixels(LEDS_COUNT, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels(LED_NUM, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
 
 // ------------| Function |-------------------
   int red[3] = {255,0,0};
@@ -64,7 +64,7 @@ pixels.show();
 void loop() {
   float segment = 360/16;
   float gxs = 40;
-  for (int i=0;i<LEDS_COUNT;i++){
+  for (int i=0;i<LED_NUM;i++){
      if  (i * segment <= gxs && gxs <= (i+1) * segment){
      LEDR_COLOR(i,purple, 500);
     }
