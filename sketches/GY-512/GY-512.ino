@@ -14,8 +14,6 @@
 
 <<<<<<< HEAD
 Adafruit_NeoPixel pixels(LEDS_NUM, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
-=======
-Adafruit_NeoPixel pixels(LEDS_COUNT, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
 >>>>>>> senpai
 
 // ------------| Function |-------------------
@@ -34,7 +32,6 @@ void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
   delay(delayTime);
 <<<<<<< HEAD
 =======
-  //pixels.clear();
 >>>>>>> senpai
   pixels.show();
 }
@@ -140,15 +137,17 @@ void loop() {
 
 =======
   // ----------- LED -------------
+    /*
   float GX_loop = gxs;
 
   GX_loop = GX_loop < 0 ? 360 + GX_loop : GX_loop;
 
-  for (int i=0;i<LEDS_COUNT;i++){
+  for (int i=0;i<LEDS_NUM;i++){
    if  (i * segment <= GX_loop && GX_loop <= (i+1) * segment){
      LEDR_COLOR(i,purple, 0);
    }
  }
+    */
 // -----------------------------
 >>>>>>> senpai
 
