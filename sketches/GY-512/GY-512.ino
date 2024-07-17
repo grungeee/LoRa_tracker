@@ -7,14 +7,14 @@
 // |=============< LED RING INCLUDE >==============|
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
-  #include <avr/power.h>
+  #include <avr/power.h> #endif
 #endif
 
 #define LED_RING_PIN 10
 #define LEDS_NUM 16
 #define LEDindex 0
 
-Adafruit_NeoPixel pixels(LEDindex, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels(LEDS_NUM, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
 
 // ------------| Function |-------------------
   int red[3] = {255,0,0};
@@ -117,7 +117,6 @@ void loop() {
   // ----------- LED 2 -------------
   float segment = 360.0 / LEDS_NUM;
   float GX_loop = gxs * 1;
-  GX_loop = 40.0;
   float x = GX_loop / 22.5;
 
   if (x > 0) {
