@@ -34,7 +34,6 @@ void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
   pixels.show();
 
   delay(delayTime);
-  pixels.clear();
   pixels.show();
 }
 // -----------------------------------------
