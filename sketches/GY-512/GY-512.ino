@@ -18,7 +18,7 @@ Adafruit_NeoPixel pixels(LEDS_COUNT, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
   int green[3] = {0,255,0};
   int blue[3] = {0,0,255};
   int purple[3] = {255,0,255};
-  int chill[3] = {50,10,50};
+  int chill[3] = {40,8,40};
 
 void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
   pixels.clear();
@@ -27,7 +27,7 @@ void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
   pixels.show();
 
   delay(delayTime);
-  pixels.clear();
+  //pixels.clear();
   pixels.show();
 }
 // -----------------------------------------
@@ -100,7 +100,8 @@ void loop() {
     mpu.getAcceleration(&ax, &ay, &az);
     mpu.getRotation(&gx, &gy, &gz);
 
-    float s = 161.0 * 2; // sensitivity scale factor
+    //float s = 161.0 * 2; // sensitivity scale factor
+    float s = 1; // sensitivity scale factor
     float gxs = gx / s;
     float gys = gy / s;
     float gzs = gz / s;
@@ -112,7 +113,7 @@ void loop() {
 
   for (int i=0;i<LEDS_COUNT;i++){
    if  (i * segment <= GX_loop && GX_loop <= (i+1) * segment){
-     LEDR_COLOR(i,chill, 0);
+     LEDR_COLOR(i,purple, 0);
    }
  }
 // -----------------------------
