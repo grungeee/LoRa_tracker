@@ -117,7 +117,7 @@ void loop() {
   // ----------- LED 2 -------------
   float segment = 360.0 / LEDS_NUM;
   float GX_loop = gxs * 1;
-  float x = GX_loop / 22.5;
+  float x = GX_loop / segment;
 
   if (x > 0) {
     if ((int(x) - x) * (-1) < int(x) + 1 - x) {
