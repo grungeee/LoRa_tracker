@@ -1,9 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <MPU6050.h>
-
 #include <Arduino.h>
-
 // |=============< LED RING INCLUDE >==============|
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
@@ -14,26 +12,30 @@
 #define LEDS_NUM 16
 #define LEDindex 0
 
+<<<<<<< HEAD
 Adafruit_NeoPixel pixels(LEDS_NUM, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
+=======
+Adafruit_NeoPixel pixels(LEDS_COUNT, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
+>>>>>>> senpai
 
 // ------------| Function |-------------------
   int red[3] = {255,0,0};
   int green[3] = {0,255,0};
   int blue[3] = {0,0,255};
   int purple[3] = {255,0,255};
+  int chill[3] = {40,8,40};
 
 void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
-  int red[3] = {255,0,0};
-  int green[3] = {0,255,0};
-  int blue[3] = {0,0,255};
-  int purple[3] = {255,0,255};
-
   pixels.clear();
   pixels.show();
   pixels.setPixelColor(ledIndex, pixels.Color(color[0], color[1], color[2]));
   pixels.show();
 
   delay(delayTime);
+<<<<<<< HEAD
+=======
+  //pixels.clear();
+>>>>>>> senpai
   pixels.show();
 }
 // -----------------------------------------
@@ -108,11 +110,13 @@ void loop() {
     mpu.getAcceleration(&ax, &ay, &az);
     mpu.getRotation(&gx, &gy, &gz);
 
-    float s = 161.0 * 2; // sensitivity scale factor
+    //float s = 161.0 * 2; // sensitivity scale factor
+    float s = 1; // sensitivity scale factor
     float gxs = gx / s;
     float gys = gy / s;
     float gzs = gz / s;
 
+<<<<<<< HEAD
   // ----------- LED 2 -------------
   float segment = 360.0 / LEDS_NUM;
   float GX_loop = gxs * 1;
@@ -134,6 +138,19 @@ void loop() {
     }
 
 
+=======
+  // ----------- LED -------------
+  float GX_loop = gxs;
+
+  GX_loop = GX_loop < 0 ? 360 + GX_loop : GX_loop;
+
+  for (int i=0;i<LEDS_COUNT;i++){
+   if  (i * segment <= GX_loop && GX_loop <= (i+1) * segment){
+     LEDR_COLOR(i,purple, 0);
+   }
+ }
+// -----------------------------
+>>>>>>> senpai
 
     Serial.print("a/g:\t");
     Serial.print(ax); Serial.print("\t");
@@ -148,7 +165,4 @@ void loop() {
     Serial.print(gys); Serial.print("\t");
     Serial.println(gzs);
     Serial.println("\n-----------------");
-
-    delay(500);
-    }
 }
