@@ -1,8 +1,6 @@
 #include <Wire.h>
 #include <MPU6050.h>
-
 #include <Arduino.h>
-
 // |=============< LED RING INCLUDE >==============|
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
@@ -20,13 +18,9 @@ Adafruit_NeoPixel pixels(LEDS_COUNT, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
   int green[3] = {0,255,0};
   int blue[3] = {0,0,255};
   int purple[3] = {255,0,255};
+  int chill[3] = {50,10,50};
 
 void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
-  int red[3] = {255,0,0};
-  int green[3] = {0,255,0};
-  int blue[3] = {0,0,255};
-  int purple[3] = {255,0,255};
-
   pixels.clear();
   pixels.show();
   pixels.setPixelColor(ledIndex, pixels.Color(color[0], color[1], color[2]));
@@ -113,9 +107,12 @@ void loop() {
 
   // ----------- LED -------------
   float GX_loop = gxs;
+
+  GX_loop = GX_loop < 0 ? 360 + GX_loop : GX_loop;
+
   for (int i=0;i<LEDS_COUNT;i++){
    if  (i * segment <= GX_loop && GX_loop <= (i+1) * segment){
-     LEDR_COLOR(i,purple, 500);
+     LEDR_COLOR(i,chill, 0);
    }
  }
 // -----------------------------
