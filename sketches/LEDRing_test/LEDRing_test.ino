@@ -5,7 +5,11 @@
 
 
 
-#define LED_RING_PIN 10
+// Arudino pins
+//#define LED_RING_PIN 10
+//esp32
+#define LED_RING_PIN 16
+
 #define LEDS_COUNT 16
 
 Adafruit_NeoPixel pixels(LEDS_COUNT, LED_RING_PIN, NEO_GRB + NEO_KHZ800);

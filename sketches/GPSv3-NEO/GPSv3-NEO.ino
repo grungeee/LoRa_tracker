@@ -4,7 +4,7 @@
 // Create a TinyGPS++ object
 TinyGPSPlus gps;
 
-// Define the serial pins for GPS
+// Define the serial pins for GPShow to wire them up
 SoftwareSerial ss(2, 3); // RX, TX
 
 void setup() {
