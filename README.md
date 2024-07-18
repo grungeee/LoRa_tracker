@@ -20,3 +20,12 @@
     - Lipo
     - StepUp
     - StepDown
+
+### Progress Functionality
+
+- [ ] LoRa Module
+- [x] GPS Module
+- [x] 16Bit LED-Ring
+- [/] 1.28" LCD
+- [ ] GY-9250
+- [ ] Power
