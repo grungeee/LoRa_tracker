@@ -8,6 +8,7 @@
 
 #define LED_RING_PIN 16
 #define LEDS_COUNT 16
+//#define LEDS_COUNT 32
 
 Adafruit_NeoPixel pixels(LEDS_COUNT, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 1000
