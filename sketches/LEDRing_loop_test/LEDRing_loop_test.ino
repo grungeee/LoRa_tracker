@@ -16,9 +16,7 @@ Adafruit_NeoPixel pixels(LED_NUM, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
   int red[3] = {255,0,0};
   int green[3] = {0,255,0};
   int blue[3] = {0,0,255};
-  int purple[3] = {255,0,255};
-
-void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
+  int purple[3] = {255,0,255}; void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
   int red[3] = {255,0,0};
   int green[3] = {0,255,0};
   int blue[3] = {0,0,255};
@@ -71,24 +69,25 @@ void loop() {
 
   float segment = 360/LED_NUM;
   float gxs = 40;
+  float GX_loop = gxs;
   float x = GX_loop / segment;
 
-if (x > 0) {
-  if ((int(x) - x) * (-1) < int(x) + 1 - x) {
-    LEDR_COLOR(int(x),purple, 500);
-  } else {
-    LEDR_COLOR(int(x + 1),purple, 500);
+    if (x > 0) {
+      if ((int(x) - x) * (-1) < int(x) + 1 - x) {
+        LEDR_COLOR(int(x),purple, 500);
+      } else {
+        LEDR_COLOR(int(x + 1),purple, 500);
+      }
+    } else {
+      GX_loop = GX_loop * (-1);
+      x = GX_loop / 22.5;
+      if ((int(x) - x) * (-1) < int(x) + 1 - x) {
+        LEDR_COLOR(int(15 - x),red, 500);
+      } else {
+        LEDR_COLOR(int(15 - (x + 1)),red, 500);
+      }
+    }
   }
-} else {
-  GX_loop = GX_loop * (-1);
-  x = GX_loop / 22.5;
-  if ((int(x) - x) * (-1) < int(x) + 1 - x) {
-    LEDR_COLOR(int(15 - x),red, 500);
-  } else {
-    LEDR_COLOR(int(15 - (x + 1)),red, 500);
-  }
-}
-}
 
 
 
