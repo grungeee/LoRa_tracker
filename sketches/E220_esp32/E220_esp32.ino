@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <LoRa_E220.h>
 #include "EByte_LoRa_E220_library.h"
+#include <HardwareSerial.h>
 
 // |=============< LED RING INCLUDE >==============|
 #include <Adafruit_NeoPixel.h>
@@ -63,6 +64,8 @@ LoRa_E220(byte txE220pin, byte rxE220pin, HardwareSerial* serial, byte auxPin, b
 // ESP32: TX3 RX2 D18 D19 D21
 //                D15 (to wake up)
 //           3  1            
+//LoRa_E220 e220ttl(&Serial2, 3, 1, 18, 21, 19);
+HardwareSerial MySerial(2);
 LoRa_E220 e220ttl(&Serial2, 3, 1, 18, 21, 19);
 
 // ===================================================
