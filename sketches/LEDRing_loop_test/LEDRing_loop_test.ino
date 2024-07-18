@@ -87,7 +87,6 @@ void loop() {
         LEDR_COLOR(int(15 - (x + 1)),red, 500);
       }
     }
-  }
 
 
 
