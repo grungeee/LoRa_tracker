@@ -41,6 +41,14 @@ void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
 // |===============================< E220 >=================================|
 #define E220_30
 #define FREQUENCY_868
+
+// Define the pins
+#define TX_PIN 17
+#define RX_PIN 16
+#define AUX_PIN 4
+#define M0_PIN 2
+#define M1_PIN 15
+
 // Arduino
 //LoRa_E220 e220ttl(2, 3, 5, 6, 7);
 
@@ -65,6 +73,7 @@ LoRa_E220(byte txE220pin, byte rxE220pin, HardwareSerial* serial, byte auxPin, b
 //                D15 (to wake up)
 //           3  1            
 //LoRa_E220 e220ttl(&Serial2, 3, 1, 18, 21, 19);
+
 HardwareSerial MySerial(2);
 LoRa_E220 e220ttl(&Serial2, 3, 1, 18, 21, 19);
 
@@ -73,10 +82,11 @@ LoRa_E220 e220ttl(&Serial2, 3, 1, 18, 21, 19);
 void printParameters(struct Configuration configuration);
 void printModuleInformation(struct ModuleInformation moduleInformation);
 // |========================================================================|
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void setup() {
-// |=============< LED RING SETUP >==============|
+// |=============< LED RING Init >==============|
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
   clock_prescale_set(clock_div_1);
 #endif
@@ -91,14 +101,48 @@ pixels.show();
 // |=============================================|
 
 // |===================< E220 >==================|
+// Create an instance of the E220 module
+LoRa_E220 e220(TX_PIN, RX_PIN, AUX_PIN, M0_PIN, M1_PIN);
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void setup() {
   Serial.begin(9600);
-  e220ttl.begin();
-// |=============================================|
+  while (!Serial);
+
+  // Initialize the E220 module
+  e220.begin();
+
+  // Set the configuration (example configuration)
+  Configuration configuration = {
+    .SPED = {
+      .airDataRate = AIR_DATA_RATE_2400,
+      .uartBaudRate = UART_BPS_9600,
+      .uartParity = MODE_00_8N1
+    },
+    .OPTION = {
+      .transmissionPower = POWER_22,
+      .RSSIAmbientNoise = RSSI_AMBIENT_NOISE_ENABLED
+    },
+    .CHANNEL = 23 // Example channel
+  };
+
+  // Apply the configuration
+  e220.setConfiguration(configuration, WRITE_CFG_PWR_DWN_SAVE);
+
+  Serial.println("E220 module initialized.");
 }
+// |=============================================|
 
-
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void loop() {
+
+//-----------------< E220 >----------------
+//------------------|Init |---------------
+  Serial.println("E220 module initialized.");
+
+//------------------------------------------
 
 // --------------- LED RING ----------------
 //---------------| Blue: ON |---------------
