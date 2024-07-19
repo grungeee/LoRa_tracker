@@ -5,12 +5,6 @@
 #define TFT_DC 9
 #define TFT_CS 10
 /*
-CS 9
-DC 10 
-MOSI 
-SCLK
-RST
-MISO
 
 RST 7
 CS 10
@@ -21,7 +15,7 @@ SCL 13
 */
 
 // Hardware SPI on Feather or other boards
-Adafruit_GC9A01A tft(TFT_CS, TFT_DC, );
+Adafruit_GC9A01A tft(TFT_CS, TFT_DC);
 
 void setup() {
   Serial.begin(9600);

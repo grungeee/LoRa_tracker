@@ -102,7 +102,7 @@ pixels.show();
 
 // |===================< E220 >==================|
 // Create an instance of the E220 module
-LoRa_E220 e220(TX_PIN, RX_PIN, AUX_PIN, M0_PIN, M1_PIN);
+LoRa_E220 e220ttl(TX_PIN, RX_PIN, AUX_PIN, M0_PIN, M1_PIN);
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void setup() {
@@ -110,7 +110,7 @@ void setup() {
   while (!Serial);
 
   // Initialize the E220 module
-  e220.begin();
+  e220ttl.begin();
 
   // Set the configuration (example configuration)
   Configuration configuration = {
@@ -127,7 +127,7 @@ void setup() {
   };
 
   // Apply the configuration
-  e220.setConfiguration(configuration, WRITE_CFG_PWR_DWN_SAVE);
+  e220ttl.setConfiguration(configuration, WRITE_CFG_PWR_DWN_SAVE);
 
   Serial.println("E220 module initialized.");
 }
@@ -136,7 +136,41 @@ void setup() {
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Correct the loop function to handle message sending and receiving properly
 void loop() {
+  // Set an LED to blue
+  LEDR_COLOR(8, blue, 500);
+
+  // Send a message
+  Serial.println("Sending...[Greet4]");
+  e220ttl.sendMessage("Hello, my name is UNO4! What's your name?");
+  delay(500);
+
+  // Receive message
+  ResponseContainer rc = e220ttl.receiveMessage();
+  if (rc.status.code == 1) {
+    Serial.println("Receiving...");
+    Serial.println(rc.data);
+
+    Serial.println("Answering...");
+    e220ttl.sendMessage("Hi, my name is UNO4");
+
+    if (rc.data == "") {
+      Serial.println("Can't hear anything...");
+    }
+
+    LEDR_COLOR(8, green, 500);
+  } else {
+    Serial.println("So lonely :(");
+    for (int i = 0; i < LEDS_NUM; i++) {
+      LEDR_COLOR(i, green, 100);
+    }
+  }
+}
+/*
+void loop() {
+
+
 
 //-----------------< E220 >----------------
 //------------------|Init |---------------
@@ -162,7 +196,37 @@ void loop() {
 //  pixels.clear();
 //  pixels.show();
 // -----------------------------------------
+// Correct the loop function to handle message sending and receiving properly
+void loop() {
+  // Set an LED to blue
+  LEDR_COLOR(8, blue, 500);
 
+  // Send a message
+  Serial.println("Sending...[Greet4]");
+  e220ttl.sendMessage("Hello, my name is UNO4! What's your name?");
+  delay(500);
+
+  // Receive message
+  ResponseContainer rc = e220ttl.receiveMessage();
+  if (rc.status.code == 1) {
+    Serial.println("Receiving...");
+    Serial.println(rc.data);
+
+    Serial.println("Answering...");
+    e220ttl.sendMessage("Hi, my name is UNO4");
+
+    if (rc.data == "") {
+      Serial.println("Can't hear anything...");
+    }
+
+    LEDR_COLOR(8, green, 500);
+  } else {
+    Serial.println("So lonely :(");
+    for (int i = 0; i < LEDS_NUM; i++) {
+      LEDR_COLOR(i, green, 100);
+    }
+  }
+}
 
 
 // --------- E220 reieved data ---------
@@ -202,3 +266,4 @@ void loop() {
   }
 }
 
+*/
