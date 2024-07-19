@@ -18,6 +18,10 @@ Adafruit_NeoPixel pixels(LEDS_NUM, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
 int red[3] = {255, 0, 0};
 int green[3] = {0, 255, 0};
 int blue[3] = {0, 0, 255};
+int yellow[3] = {0, 255, 255};
+int dim_yellow[3] = {0, 20, 20};
+int dim_white[3] = {20, 20, 20};
+
 
 
 //led_bit, color, wait
@@ -40,7 +44,8 @@ HardwareSerial Serial2(2); // Create an instance of HardwareSerial for UART2
 #define M0_PIN 2
 #define M1_PIN 15
 
-LoRa_E220 e220ttl(TX_PIN, RX_PIN, &Serial2, AUX_PIN, UART_BPS_RATE_9600, SERIAL_8N1);
+//LoRa_E220 e220ttl(TX_PIN, RX_PIN, &Serial2, AUX_PIN, UART_BPS_RATE_9600, SERIAL_8N1);
+LoRa_E220 e220ttl(&Serial2, 15, 21, 19);
 
 void configureChannel() {
     ResponseStructContainer c;
@@ -60,7 +65,7 @@ void configureChannel() {
 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void setup() {
   // ----------- [ Standard Setup ] -----------
-  Serial.begin(9600); // Initialize Serial
+  Serial.begin(115200); // Initialize Serial
   while (!Serial); //This line waits for the serial port to be ready before continuing with the rest of the program.
 
 
@@ -89,38 +94,46 @@ void setup() {
   #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
     clock_prescale_set(clock_div_1);
   #endif
+
   pixels.begin(); 
   pixels.clear();
   pixels.show();
+
+ // ------ init led ring animation  test ------
+  for (int i = 0; i < LEDS_NUM; i++) {
+  LEDR_COLOR(i, dim_yellow, 100);
+  }
+
   // |=============================================|
 }
 
 
 // |====================================< LOOP >=========================================|
 void loop() {
-  LEDR_COLOR(8, blue, 500);
-
   Serial.println("Sending...[Greet4]");
   e220ttl.sendMessage("Hello, my name is UNO4! What's your name?");
-  delay(500);
+  LEDR_COLOR(8, blue, 500);
 
   ResponseContainer rc = e220ttl.receiveMessage();
   if (rc.status.code == 1) {
     Serial.println("Receiving...");
     Serial.println(rc.data);
+    LEDR_COLOR(8, green, 500);
 
     Serial.println("Answering...");
     e220ttl.sendMessage("Hi, my name is UNO4");
+    LEDR_COLOR(8, green, 500);
+    LEDR_COLOR(9, green, 500);
+    LEDR_COLOR(10, green, 500);
 
     if (rc.data == "") {
       Serial.println("Can't hear anything...");
+      LEDR_COLOR(8, red, 500);
     }
-
-    LEDR_COLOR(8, green, 500);
   } else {
     Serial.println("So lonely :(");
     for (int i = 0; i < LEDS_NUM; i++) {
-      LEDR_COLOR(i, green, 100);
+      LEDR_COLOR(i, dim_white, 100);
     }
   }
 }
