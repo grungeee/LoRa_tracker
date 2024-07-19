@@ -27,6 +27,7 @@
 - [/] LoRa Module
     - works on Arduino
     - code kinda works on esp32 but no communction is established
+        - [ ] need to meke it work on esp32
 - [x] GPS Module
     - worked like a charm both on arduino and esp32
 - [x] 16Bit LED-Ring
@@ -35,8 +36,15 @@
 - [ ] GY-9250
     - got some work done on GY-512
     - need to redo for compass
+
 - [ ] Power
     - didn't even start to work on a prototype.
     - i got charging slot for a 18650
     - 1x 18650 lying around 
     - maybe a StepUp or a StepDown
+- [ ] Enclosure
+    - can start with the case after everything kinda works together
+    - First prototype can be without power for now
+
+
+    
