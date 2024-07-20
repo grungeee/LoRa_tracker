@@ -32,6 +32,7 @@
 
 // With FIXED SENDER configuration
 #define DESTINATION_ADDL 3
+#define FREQUENCY_868
 
 // With FIXED RECEIVER configuration
 //#define DESTINATION_ADDL 2
@@ -42,6 +43,13 @@
 
 #include "Arduino.h"
 #include "LoRa_E220.h"
+
+
+#define TX_PIN 17
+#define RX_PIN 16
+#define AUX_PIN 4
+#define M0_PIN 2
+#define M1_PIN 15
 
 // ---------- esp8266 pins --------------
 //LoRa_E220 e220ttl(RX, TX, AUX, M0, M1);  // Arduino RX <-- e220 TX, Arduino TX --> e220 RX
@@ -72,6 +80,7 @@
 
 // ---------- esp32 pins --------------
 LoRa_E220 e220ttl(&Serial2, 15, 21, 19); //  RX AUX M0 M1
+//LoRa_E220 e220ttl(&Serial2, AUX_PIN, M0_PIN, M1_PIN); //  RX AUX M0 M1
 
 // LoRa_E220 e220ttl(&Serial2, 22, 4, 18, 21, 19, UART_BPS_RATE_9600); //  esp32 RX <-- e220 TX, esp32 TX --> e220 RX AUX M0 M1
 // -------------------------------------
@@ -118,7 +127,7 @@ void loop() {
 #ifdef ENABLE_RSSI
 	ResponseContainer rc = e220ttl.receiveMessageRSSI();
 #else
-	ResponseContainer rc = e220ttl.receiveMessage();
+    ResponseContainer rc = e220ttl.receiveMessage();
 #endif
 	// Is something goes wrong print error
 	if (rc.status.code!=1){

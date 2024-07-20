@@ -44,6 +44,8 @@ HardwareSerial Serial2(2); // Create an instance of HardwareSerial for UART2
 #define M0_PIN 2
 #define M1_PIN 15
 
+#define FREQUENCY_868
+
 //LoRa_E220 e220ttl(TX_PIN, RX_PIN, &Serial2, AUX_PIN, UART_BPS_RATE_9600, SERIAL_8N1);
 LoRa_E220 e220ttl(&Serial2, 15, 21, 19);
 
