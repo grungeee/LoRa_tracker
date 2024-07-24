@@ -15,18 +15,6 @@
  *
  * You must uncommend the correct constructor.
  *
- * by Renzo Mischianti <https://www.mischianti.org>
- *
- * https://www.mischianti.orgSerial2
- *
- * E220		  ----- WeMos D1 mini	----- esp32			----- Arduino Nano 33 IoT	----- Arduino MKR	----- Raspberry Pi Pico   ----- stm32               ----- ArduinoUNO
- * M0         ----- D7 (or GND) 	----- 19 (or GND) 	----- 4 (or GND) 			----- 2 (or GND) 	----- 10 (or GND)	      ----- PB0 (or GND)        ----- 7 Volt div (or GND)
- * M1         ----- D6 (or GND) 	----- 21 (or GND) 	----- 6 (or GND) 			----- 4 (or GND) 	----- 11 (or GND)	      ----- PB10 (or GND)       ----- 6 Volt div (or GND)
- * TX         ----- D3 (PullUP)		----- TX2 (PullUP)	----- TX1 (PullUP)			----- 14 (PullUP)	----- 8 (PullUP)	      ----- PA2 TX2 (PullUP)    ----- 4 (PullUP)
- * RX         ----- D4 (PullUP)		----- RX2 (PullUP)	----- RX1 (PullUP)			----- 13 (PullUP)	----- 9 (PullUP)	      ----- PA3 RX2 (PullUP)    ----- 5 Volt div (PullUP)
- * AUX        ----- D5 (PullUP)		----- 18  (PullUP)	----- 2  (PullUP)			----- 0  (PullUP)	----- 2  (PullUP)	      ----- PA0  (PullUP)       ----- 3 (PullUP)
- * VCC        ----- 3.3v/5v			----- 3.3v/5v		----- 3.3v/5v				----- 3.3v/5v		----- 3.3v/5v		      ----- 3.3v/5v             ----- 3.3v/5v
- * GND        ----- GND				----- GND			----- GND					----- GND			----- GND			      ----- GND                 ----- GND
  *
  */
 
@@ -39,44 +27,18 @@
 
 // If you want use RSSI uncomment //#define ENABLE_RSSI true
 // and use relative configuration with RSSI enabled
-//#define ENABLE_RSSI true
+#define ENABLE_RSSI true
 
 #include "Arduino.h"
 #include "LoRa_E220.h"
 
-
 #define TX_PIN 17 //  TX2  in example
 #define RX_PIN 16 //  RX2  in example
 #define AUX_PIN 4 // 18 in exaple
-// Just drop the mohterfucking M0 and M1 pins
-// --> GND this bitch
 #define M0_PIN 2 // 19 in example
 #define M1_PIN 15 // 21 in example
 
-// ---------- Arduino pins --------------
-// LoRa_E220 e220ttl(4, 5, 3, 7, 6); // Arduino RX <-- e220 TX, Arduino TX --> e220 RX AUX M0 M1
-//LoRa_E220 e220ttl(4, 5); // Config without connect AUX and M0 M1
-
-//#include <SoftwareSerial.h>
-//SoftwareSerial mySerial(4, 5); // Arduino RX <-- e220 TX, Arduino TX --> e220 RX
-//LoRa_E220 e220ttl(&mySerial, 3, 7, 6); // AUX M0 M1
-// -------------------------------------
-
 // ---------- esp32 pins --------------
-// TESTING
-//LoRa_E220 e220ttl(&Serial2, 15, 21, 19); //  RX AUX M0 M1
-// 15 -> 4 ? esp32 fuckery (load prohibited??)
-// 21 -> 2 ? works fine; changes: HEAD: 0 0 0; LBT: Enabled
-// 19 -> 14  ? dunno what has changed but i notised that RSSI and LBT are toggling
-// probalby because of floating pins
-// ------------------------------
-//LoRa_E220 e220ttl(&Serial2, AUX_PIN, M0_PIN, M1_PIN); //  RX AUX M0 M1
-
-//
-//LoRa_E220 e220ttl(&Serial2, 4, 2, 15); //  RX AUX M0 M1
-// LoRa_E220 e220ttl(&Serial2, 22, 4, 18, 21, 19, UART_BPS_RATE_9600); //  esp32 RX <-- e220 TX, esp32 TX --> e220 RX AUX M0 M1
-//LoRa_E220 e220ttl(&Serial2, 17, 16, 4, 2, 15, UART_BPS_RATE_9600)); // will it work? -> not
-//LoRa_E220 e220ttl(17, 16, &Serial2, 4, 2, 15, UART_BPS_RATE_9600); // will it work? -> it kinda does
 LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RATE_9600); // -> this does too
 
 // -------------------------------------
