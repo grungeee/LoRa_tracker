@@ -1,6 +1,5 @@
 // |==============================< LIBRARIES >===============================|
-//  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include <Arduino.h> // What do I need this for again?
+#include <Arduino.h>
 
 // |=============< LED RING PRESETS >==============|
 #include <Adafruit_NeoPixel.h>
@@ -22,8 +21,6 @@ int yellow[3] = {0, 255, 255};
 int dim_yellow[3] = {0, 20, 20};
 int dim_white[3] = {20, 20, 20};
 
-
-
 //led_bit, color, wait
 void LEDR_COLOR(int ledIndex, int color[3], int delayTime) {
   pixels.clear();
@@ -36,17 +33,11 @@ void LEDR_COLOR(int ledIndex, int color[3], int delayTime) {
 #include <LoRa_E220.h>
 #include <HardwareSerial.h>
 
-HardwareSerial Serial2(2); // Create an instance of HardwareSerial for UART2
-
-#define TX_PIN 17
-#define RX_PIN 16
-#define AUX_PIN 4
-#define M0_PIN 2
-#define M1_PIN 15
+// Remove this line as Serial2 is already defined in the ESP32 core
+// HardwareSerial Serial2(2);
 
 #define FREQUENCY_868
 
-//LoRa_E220 e220ttl(TX_PIN, RX_PIN, &Serial2, AUX_PIN, UART_BPS_RATE_9600, SERIAL_8N1);
 LoRa_E220 e220ttl(&Serial2, 15, 21, 19);
 
 void configureChannel() {
@@ -61,19 +52,14 @@ void configureChannel() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
 // |==============================< SETUP >===============================|
-//  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void setup() {
   // ----------- [ Standard Setup ] -----------
   Serial.begin(115200); // Initialize Serial
   while (!Serial); //This line waits for the serial port to be ready before continuing with the rest of the program.
 
-
   // |=============<  E220 SETUP >==============|
- // Initialize Serial2 with specific TX and RX pins
-  Serial2.begin(9600, SERIAL_8N1, 17, 16); // TX = GPIO17, RX = GPIO16
+  Serial2.begin(9600); // TX = GPIO17, RX = GPIO16
 
   // Initialize E220 module
   e220ttl.begin();
@@ -101,9 +87,9 @@ void setup() {
   pixels.clear();
   pixels.show();
 
- // ------ init led ring animation  test ------
+  // ------ init led ring animation  test ------
   for (int i = 0; i < LEDS_NUM; i++) {
-  LEDR_COLOR(i, dim_yellow, 100);
+    LEDR_COLOR(i, dim_yellow, 100);
   }
 
   // |=============================================|
