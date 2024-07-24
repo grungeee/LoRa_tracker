@@ -17,8 +17,8 @@ Adafruit_NeoPixel pixels(LEDS_NUM, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
 int red[3] = {255, 0, 0};
 int green[3] = {0, 255, 0};
 int blue[3] = {0, 0, 255};
-int yellow[3] = {0, 255, 255};
-int dim_yellow[3] = {0, 20, 20};
+int yellow[3] = {255, 255, 0};
+int dim_yellow[3] = {20, 20, 0};
 int dim_white[3] = {20, 20, 20};
 
 //led_bit, color, wait
@@ -108,16 +108,17 @@ void loop() {
     Serial.println(rc.data);
     LEDR_COLOR(8, green, 500);
 
-    Serial.println("Answering...");
-    e220ttl.sendMessage("Hi, my name is UNO4");
-    LEDR_COLOR(8, green, 500);
-    LEDR_COLOR(9, green, 500);
-    LEDR_COLOR(10, green, 500);
-
     if (rc.data == "") {
       Serial.println("Can't hear anything...");
       LEDR_COLOR(8, red, 500);
     }
+
+    Serial.println("Answering...");
+    e220ttl.sendMessage("Hi, my name is UNO4");
+    LEDR_COLOR(8, yellow, 500);
+    LEDR_COLOR(9, yellow, 500);
+    LEDR_COLOR(10, yellow, 500);
+
   } else {
     Serial.println("So lonely :(");
     for (int i = 0; i < LEDS_NUM; i++) {

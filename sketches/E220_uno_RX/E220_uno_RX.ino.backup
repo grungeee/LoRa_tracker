@@ -33,6 +33,16 @@ void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
   pixels.show();
 }
 // -------------------------------------------------
+
+// ------------------| Function |-------------------
+void LEDcycle (color){
+  for(int i=0; i<LEDS_COUNT; i++) {
+    LEDR_COLOR(i,color,100);
+  }
+}
+// |================================================|
+
+
 // |================================================|
 
 // Message counter
@@ -78,11 +88,15 @@ void loop() {
 //---------------| Blue: ON |---------------
 //------------------------------------------
 
+
+LEDcycle(blue);
   //LEDindex = msgCount;
+    /*
   pixels.clear();
   pixels.show();
   pixels.setPixelColor(LEDindex, pixels.Color(0, 0, 255));
   pixels.show();
+    */
 // -----------------------------------------
 
     Serial.println("Sending...[Greet3]");
