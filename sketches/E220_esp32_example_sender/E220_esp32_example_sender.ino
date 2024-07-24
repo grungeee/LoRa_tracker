@@ -45,11 +45,13 @@
 #include "LoRa_E220.h"
 
 
-#define TX_PIN 17
-#define RX_PIN 16
-#define AUX_PIN 4
-#define M0_PIN 2
-#define M1_PIN 15
+#define TX_PIN 17 //  TX2  in example
+#define RX_PIN 16 //  RX2  in example
+#define AUX_PIN 4 // 18 in exaple
+// Just drop the mohterfucking M0 and M1 pins
+// --> GND this bitch
+#define M0_PIN 2 // 19 in example
+#define M1_PIN 15 // 21 in example
 
 // ---------- Arduino pins --------------
 // LoRa_E220 e220ttl(4, 5, 3, 7, 6); // Arduino RX <-- e220 TX, Arduino TX --> e220 RX AUX M0 M1
@@ -62,16 +64,21 @@
 
 // ---------- esp32 pins --------------
 // TESTING
+//LoRa_E220 e220ttl(&Serial2, 15, 21, 19); //  RX AUX M0 M1
 // 15 -> 4 ? esp32 fuckery (load prohibited??)
 // 21 -> 2 ? works fine; changes: HEAD: 0 0 0; LBT: Enabled
 // 19 -> 14  ? dunno what has changed but i notised that RSSI and LBT are toggling
 // probalby because of floating pins
 // ------------------------------
-(probably becasue of )
-LoRa_E220 e220ttl(&Serial2, 15, 21, 14); //  RX AUX M0 M1
 //LoRa_E220 e220ttl(&Serial2, AUX_PIN, M0_PIN, M1_PIN); //  RX AUX M0 M1
 
+//
+//LoRa_E220 e220ttl(&Serial2, 4, 2, 15); //  RX AUX M0 M1
 // LoRa_E220 e220ttl(&Serial2, 22, 4, 18, 21, 19, UART_BPS_RATE_9600); //  esp32 RX <-- e220 TX, esp32 TX --> e220 RX AUX M0 M1
+//LoRa_E220 e220ttl(&Serial2, 17, 16, 4, 2, 15, UART_BPS_RATE_9600)); // will it work? -> not
+//LoRa_E220 e220ttl(17, 16, &Serial2, 4, 2, 15, UART_BPS_RATE_9600); // will it work? -> it kinda does
+LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RATE_9600); // -> this does too
+
 // -------------------------------------
 
 void printParameters(struct Configuration configuration);

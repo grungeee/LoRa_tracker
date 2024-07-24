@@ -36,10 +36,27 @@ void LEDR_COLOR(int ledIndex, int color[3], int delayTime) {
 // Remove this line as Serial2 is already defined in the ESP32 core
 // HardwareSerial Serial2(2);
 
+// Configs
 #define FREQUENCY_868
 
-LoRa_E220 e220ttl(&Serial2, 15, 21, 19);
+// Pins
+#define TX_PIN 17 //  TX2  in example
+#define RX_PIN 16 //  RX2  in example
+#define AUX_PIN 4 // 18 in exaple
+    // Just drop the mohterfucking M0 and M1 pins
+    // --> GND this bitch
+#define M0_PIN 2 // 19 in example
+#define M1_PIN 15 // 21 in example
 
+//LoRa_E220 e220ttl(&Serial2, 15, 21, 19);
+
+
+// LoRa_E220 e220ttl(&Serial2, 22, 4, 18, 21, 19, UART_BPS_RATE_9600); //  esp32 RX <-- e220 TX, esp32 TX --> e220 RX AUX M0 M1
+LoRa_E220 e220ttl(&Serial2, 17, 16, 4, 21, 15, UART_BPS_RATE_9600)); // will it work?
+LoRa_E220 e220ttl(&Serial2, 17, 16, 4, 21, 15, UART_BPS_RATE_9600)); // will it work?
+
+
+// Configuration
 void configureChannel() {
     ResponseStructContainer c;
     c = e220ttl.getConfiguration();
@@ -55,7 +72,7 @@ void configureChannel() {
 // |==============================< SETUP >===============================|
 void setup() {
   // ----------- [ Standard Setup ] -----------
-  Serial.begin(115200); // Initialize Serial
+  Serial.begin(9600); // Initialize Serial || Alternative BDR: 115200
   while (!Serial); //This line waits for the serial port to be ready before continuing with the rest of the program.
 
   // |=============<  E220 SETUP >==============|
