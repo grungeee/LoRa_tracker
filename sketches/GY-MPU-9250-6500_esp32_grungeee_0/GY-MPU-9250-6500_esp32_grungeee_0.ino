@@ -1,6 +1,5 @@
 // MPU6050 offset-finder, based on Jeff Rowberg's MPU6050_RAW
 // 2016-10-19 by Robert R. Fenichel (bob@fenichel.net)
-
 // I2C device class (I2Cdev) demonstration Arduino sketch for MPU6050 class
 // 10/7/2011 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/i2cdevlib
@@ -117,7 +116,7 @@ const int NSlow = 1000;    // ..
 const int LinesBetweenHeaders = 5;
       int LowValue[6];
       int HighValue[6];
-      int Smoothed[6];
+      int Smoothed[6]
       int LowOffset[6];
       int HighOffset[6];
       int Target[6];
@@ -151,7 +150,7 @@ void GetSmoothed()
 //    Serial.println(" Hz");
     for (i = iAx; i <= iGz; i++)
       { Smoothed[i] = (Sums[i] + N/2) / N ; }
-  } // GetSmoothed
+  } // GetSmoothedI2C_SLV0_REG an
 
 void Initialize()
   {
@@ -358,4 +357,6 @@ void setup()
  
 void loop()
   {
+
+
   } // loop
