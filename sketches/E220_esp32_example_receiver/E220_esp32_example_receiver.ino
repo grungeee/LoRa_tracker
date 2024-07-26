@@ -45,6 +45,8 @@
 #define M0_PIN 2
 #define M1_PIN 15
 
+//#define DESTINATION_ADDL 2 // dunno
+
 LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RATE_9600); // -> this does too
 
 // -------------------------------------

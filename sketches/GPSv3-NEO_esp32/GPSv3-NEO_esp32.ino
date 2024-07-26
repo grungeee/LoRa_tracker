@@ -8,8 +8,14 @@ TinyGPSPlus gps;
 HardwareSerial mySerial(1);
 
 // Pin definitions
-const int RXPin = 16; // RX pin of ESP32 connected to TX of GPS module
-const int TXPin = 17; // TX pin of ESP32 connected to RX of GPS module
+//const int RXPin = 16; // RX pin of ESP32 connected to TX of GPS module
+//const int TXPin = 17; // TX pin of ESP32 connected to RX of GPS module
+//const int RXPin = 3; // RX pin of ESP32 connected to TX of GPS module
+//const int TXPin = 1; // TX pin of ESP32 connected to RX of GPS module
+//const int RXPin = 10; // RX pin of ESP32 connected to TX of GPS module
+//const int TXPin = 9; // TX pin of ESP32 connected to RX of GPS module
+const int RXPin = 33; // RX pin of ESP32 connected to TX of GPS module
+const int TXPin = 32; // TX pin of ESP32 connected to RX of GPS module
 const uint32_t GPSBaud = 9600; // GPS module baud rate
 
 void setup()

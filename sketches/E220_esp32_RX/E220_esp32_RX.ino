@@ -12,7 +12,7 @@
 #include "LoRa_E220.h"
 
 
-//#define ENABLE_RSSI true
+#define ENABLE_RSSI true
 
 // ---------- esp32 pins --------------
 #define TX_PIN 17 //  TX2  in example
@@ -25,7 +25,7 @@ LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RA
 // -------------------------------------
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
     while (!Serial) {}; // wait until serial port is opened
 
   // Startup all pins and UART
@@ -44,7 +44,10 @@ void loop() {
 	ResponseContainer rc = e220ttl.receiveMessageRSSI();
 #else
 	ResponseContainer rc = e220ttl.receiveMessage();
-#endif // Is something goes wrong print error if (rc.status.code!=1){ Serial.println(rc.status.getResponseDescription());
+#endif
+	// Is something goes wrong print error
+	if (rc.status.code!=1){
+		Serial.println(rc.status.getResponseDescription());
 	}else{
 		// Print the data received
 		Serial.println(rc.status.getResponseDescription());
@@ -55,7 +58,6 @@ void loop() {
 	}
   }
 }
-
 ///////////////////////////////
 
 /*
