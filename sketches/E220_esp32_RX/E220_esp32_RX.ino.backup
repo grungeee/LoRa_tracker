@@ -10,7 +10,6 @@
 
 #include "Arduino.h"
 #include "LoRa_E220.h"
-#include "math.h"
 
 
 #define ENABLE_RSSI true
@@ -25,15 +24,12 @@
 LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RATE_9600); // -> this does too
 // -------------------------------------
 
-// =============================<< SETUP >======================================
 void setup() {
-
-
   Serial.begin(115200);
     while (!Serial) {}; // wait until serial port is opened
 
-  
-  e220ttl.begin(); // Startup all pins and UART
+  // Startup all pins and UART
+  e220ttl.begin();
 
     // ------------------------ config ----------------------
 //	ResponseStructContainer c;
@@ -47,30 +43,7 @@ void setup() {
   Serial.println("YELLOW: Start receiving!");
 }
 
-
-// =============================<< LOOP >======================================
 void loop() {
-
-    // ------------------ GPS calc --------------------
-  // Example coordinates (latitude, longitude) in degrees
-    /*
-  double lat1 = 37.7749;
-  double lon1 = -122.4194;
-  double lat2 = 34.0522;
-  double lon2 = -118.2437;
-
-  double distance = calculateDistance(lat1, lon1, lat2, lon2);
-  double bearing = calculateBearing(lat1, lon1, lat2, lon2);
-
-  Serial.print("---------------------------");
-  Serial.print("Distance (m): ");
-  Serial.println(distance);
-
-  Serial.print("Bearing (radians): ");
-  Serial.println(bearing);
-  Serial.print("---------------------------");
-  */
-    // --------------------------------------------------
 	// If something available
   if (e220ttl.available()>1) {
 	  Serial.println("GREEN:Message received!");

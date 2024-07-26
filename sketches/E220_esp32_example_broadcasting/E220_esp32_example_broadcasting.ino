@@ -89,11 +89,23 @@ void setup() {
 
   // Startup all pins and UART
   e220ttl.begin();
+    // ------------------------ config ----------------------
+	ResponseStructContainer c;
+	c = e220ttl.getConfiguration();
+	Configuration configuration = *(Configuration*) c.data;
+   // ResponseStatus rs = e220ttl.setConfiguration(configuration);
+	configuration.CHAN = 23; // Communication channel
+	configuration.ADDL = 0x03;  // First part of address
+	configuration.ADDH = 0x00; // Second part
+    //configuration.TRANSMISSION_MODE.fixedTransmission = FT_TRANSPARENT_TRANSMISSION;
+    // ----------------------------------------------
+
 
   Serial.println("Hi, I'm going to send message!");
 
   // Send message
- ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23, "Hello, world?");
+ //ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23, "Hello, world?");
+ ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23,"Hello, world?");
 //////////////////////////////////////////
 
 //////////////////////////////////////////
@@ -114,16 +126,15 @@ void loop() {
     // Display information from the GPS module
     if (gps.location.isUpdated())
     {
-    message = String(gps.location.lat(), 6) + "," + String(gps.location.lng(), 6) + "," + String(gps.altitude.meters()) + "," + String(gps.satellites.value()) + "," + String(gps.hdop.value());
+    message = "Latitude: " + String(gps.location.lat(), 6) + "\n" + "Longitude: " + String(gps.location.lng(), 6) + "\n" "Altitude: " + String(gps.altitude.meters()) + "\n" + "Satellites: " + String(gps.satellites.value()) + "\n" + "HDOP: " + String(gps.hdop.value());
     //message = String(gps.location.lat(), 6);
      ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(chan, message);
             /*
-     ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23,String(gps.location.lat(), 6));
-     ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23,String(gps.altitude.meters()));
-     ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23,String(gps.satellites.value()));
-     ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23,String(gps.hdop.value()));
+        WiFi:
+        Latitude: 48.187563
+        Longitude: 15.617960
+        Altitude: 304.40            /*
 
-            /*
      ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23,String(gps.location.lng(), 6));
      ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23,String(gps.location.lat(), 6));
      ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23,String(gps.altitude.meters()));
@@ -170,3 +181,59 @@ void loop() {
   }
 }
 
+
+//	----------------------- DEFAULT TRANSPARENT WITH RSSI -----------------------
+//	configuration.ADDL = 0x03;
+//	configuration.ADDH = 0x00;
+//
+//	configuration.CHAN = 23;
+//
+//	configuration.SPED.uartBaudRate = UART_BPS_9600;
+//	configuration.SPED.airDataRate = AIR_DATA_RATE_010_24;
+//	configuration.SPED.uartParity = MODE_00_8N1;
+// ResponseStatus rs = e220ttl.setConfiguration(configuration);
+//	configuration.OPTION.subPacketSetting = SPS_200_00;
+//	configuration.OPTION.RSSIAmbientNoise = RSSI_AMBIENT_NOISE_DISABLED;
+//	configuration.OPTION.transmissionPower = POWER_22;
+//
+//	configuration.TRANSMISSION_MODE.enableRSSI = RSSI_ENABLED;
+//	configuration.TRANSMISSION_MODE.fixedTransmission = FT_TRANSPARENT_TRANSMISSION;
+//	configuration.TRANSMISSION_MODE.enableLBT = LBT_DISABLED;
+//	configuration.TRANSMISSION_MODE.WORPeriod = WOR_2000_011;
+//	----------------------- FIXED SENDER -----------------------
+//	configuration.ADDL = 0x02;
+//	configuration.ADDH = 0x00;
+//
+//	configuration.CHAN = 23;
+//
+//	configuration.SPED.uartBaudRate = UART_BPS_9600;
+//	configuration.SPED.airDataRate = AIR_DATA_RATE_010_24;
+//	configuration.SPED.uartParity = MODE_00_8N1;
+//
+//	configuration.OPTION.subPacketSetting = SPS_200_00;
+//	configuration.OPTION.RSSIAmbientNoise = RSSI_AMBIENT_NOISE_DISABLED;
+//	configuration.OPTION.transmissionPower = POWER_22;
+//
+//	configuration.TRANSMISSION_MODE.enableRSSI = RSSI_DISABLED;
+//	configuration.TRANSMISSION_MODE.fixedTransmission = FT_FIXED_TRANSMISSION;
+//	configuration.TRANSMISSION_MODE.enableLBT = LBT_DISABLED;
+//	configuration.TRANSMISSION_MODE.WORPeriod = WOR_2000_011;
+//
+//	----------------------- FIXED RECEIVER -----------------------
+//	configuration.ADDL = 0x03;
+//	configuration.ADDH = 0x00;
+//
+//	configuration.CHAN = 23;
+//
+//	configuration.SPED.uartBaudRate = UART_BPS_9600;
+//	configuration.SPED.airDataRate = AIR_DATA_RATE_010_24;
+//	configuration.SPED.uartParity = MODE_00_8N1;
+//
+//	configuration.OPTION.subPacketSetting = SPS_200_00;
+//	configuration.OPTION.RSSIAmbientNoise = RSSI_AMBIENT_NOISE_DISABLED;
+//	configuration.OPTION.transmissionPower = POWER_22;
+//
+//	configuration.TRANSMISSION_MODE.enableRSSI = RSSI_DISABLED;
+//	configuration.TRANSMISSION_MODE.fixedTransmission = FT_FIXED_TRANSMISSION;
+//	configuration.TRANSMISSION_MODE.enableLBT = LBT_DISABLED;
+//	configuration.TRANSMISSION_MODE.WORPeriod = WOR_2000_011;
