@@ -1,16 +1,56 @@
-/*
- * EBYTE LoRa E220
- *
- * Receive messages on CHANNEL 23
- * Uncomment #define ENABLE_RSSI true in this sketch
- * if the sender send RSSI also
-// If you want use RSSI uncomment
-#define ENABLE_RSSI true
- */
 
+// /==========================================/ START /===================================/
 #include "Arduino.h"
 #include "LoRa_E220.h"
+#include <TinyGPSPlus.h>
+#include <HardwareSerial.h>
 #include "math.h"
+
+// |==========================< LED RING INCLUDE >===========================|
+#include <Adafruit_NeoPixel.h>
+#ifdef __AVR__
+  #include <avr/power.h>
+#endif
+
+#define LED_RING_PIN 21 // NOT GOOD FOR SPI
+#define LEDS_NUM 16
+#define LEDindex 0
+
+Adafruit_NeoPixel pixels(LEDS_NUM, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
+
+// ------------| Function |-------------------
+  int red[3] = {255,0,0};
+  int green[3] = {0,255,0};
+  int blue[3] = {0,0,255};
+  int purple[3] = {255,0,255};
+  int chill[3] = {40,8,40};
+  int pink[3] = {125,10,10};
+  int yellow[3] = {255, 255, 0};
+  int dim_yellow[3] = {20, 20, 0};
+  int dim_white[3] = {20, 20, 20};
+void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
+  pixels.setPixelColor(ledIndex, pixels.Color(color[0], color[1], color[2]));
+  pixels.show();
+  delay(delayTime);
+  pixels.clear();
+  pixels.show();
+}
+// -----------------------------------------
+void LEDcycle (int color[3]){
+  for (int i=0; i<LEDS_NUM; i++) {
+    LEDR_COLOR(i,color,100);
+  }
+}
+/*
+    void loopXTimes (int count){
+    int loopIterValue = 0;
+        for (int i = 0; i < count; i++) {
+            loopIterValue = i;
+        }
+    reutrn loopIterValue;
+    }
+    */
+// |================================================|
 
 
 #define ENABLE_RSSI true
@@ -27,6 +67,14 @@ LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RA
 
 // =============================<< SETUP >======================================
 void setup() {
+// |=============< LED RING SETUP >==============|
+#if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
+  clock_prescale_set(clock_div_1);
+#endif
+pixels.begin(); 
+pixels.clear();
+pixels.show();
+// |=============================================|
 
 
   Serial.begin(115200);
@@ -44,12 +92,26 @@ void setup() {
 //	configuration.ADDH = 0x00; // Second part
     // ----------------------------------------------
 
-  Serial.println("YELLOW: Start receiving!");
+    
+    //Serial.print(String(loopXTimes(5)));
+    //LEDR_COLOR(loopXTimes(16), yellow, 100);
+    
+    LEDR_COLOR(0,pink,1000);
+    delay(1000);
+    LEDR_COLOR(0,pink,1000);
+    delay(1000);
+    LEDR_COLOR(0,pink,1000);
+    delay(1000);
+    LEDcycle(yellow);
+    Serial.println("YELLOW: Start receiving!");
+
 }
 
 
 // =============================<< LOOP >======================================
 void loop() {
+    LEDR_COLOR(0,dim_white,1000);
+    delay(1000);
 
     // ------------------ GPS calc --------------------
   // Example coordinates (latitude, longitude) in degrees
@@ -85,6 +147,8 @@ void loop() {
 	if (rc.status.code!=1){
 		Serial.println(rc.status.getResponseDescription());
 	}else{
+    LEDR_COLOR(8,chill, 1000);
+    LEDR_COLOR(8,pink, 1000);
 		// Print the data received
 		Serial.println(rc.status.getResponseDescription());
 		Serial.println(rc.data);

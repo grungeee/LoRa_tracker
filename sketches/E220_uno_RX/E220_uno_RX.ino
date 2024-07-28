@@ -35,11 +35,13 @@ void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
 // -------------------------------------------------
 
 // ------------------| Function |-------------------
-void LEDcycle (color){
-  for(int i=0; i<LEDS_COUNT; i++) {
-    LEDR_COLOR(i,color,100);
+/*
+void ledcycle (color){
+  for(int i=0; i<leds_count; i++) {
+    ledr_color(i,color,100);
   }
 }
+*/
 // |================================================|
 
 
@@ -89,7 +91,6 @@ void loop() {
 //------------------------------------------
 
 
-LEDcycle(blue);
   //LEDindex = msgCount;
     /*
   pixels.clear();

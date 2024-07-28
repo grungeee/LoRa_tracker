@@ -48,7 +48,7 @@ void print_calibration() {
     Serial.print(mpu.getGyroBiasY() / (float)MPU9250::CALIB_GYRO_SENSITIVITY);
     Serial.print(", ");
     Serial.print(mpu.getGyroBiasZ() / (float)MPU9250::CALIB_GYRO_SENSITIVITY);
-    Serial.println();
+    Serial.println()c;
     Serial.println("mag bias [mG]: ");
     Serial.print(mpu.getMagBiasX());
     Serial.print(", ");

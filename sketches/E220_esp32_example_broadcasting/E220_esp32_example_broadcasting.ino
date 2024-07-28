@@ -34,10 +34,53 @@
 // and use relative configuration with RSSI enabled
 //#define ENABLE_RSSI true
 
+// /==========================================/ START /===================================/
 #include "Arduino.h"
 #include "LoRa_E220.h"
 #include <TinyGPSPlus.h>
 #include <HardwareSerial.h>
+
+// |=============< LED RING INCLUDE >==============|
+#include <Adafruit_NeoPixel.h>
+#ifdef __AVR__
+  #include <avr/power.h>
+#endif
+
+#define LED_RING_PIN 21
+#define LEDS_NUM 16
+#define LEDindex 0
+
+Adafruit_NeoPixel pixels(LEDS_NUM, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
+
+// ------------| Function |-------------------
+  int red[3] = {255,0,0};
+  int green[3] = {0,255,0};
+  int blue[3] = {0,0,255};
+  int purple[3] = {255,0,255};
+  int chill[3] = {40,8,40};
+  int pink[3] = {125,10,10};
+  int yellow[3] = {255, 255, 0};
+  int dim_yellow[3] = {20, 20, 0};
+  int dim_white[3] = {20, 20, 20};
+  int dim_blue[3] = {0, 0, 20};
+
+void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
+  pixels.setPixelColor(ledIndex, pixels.Color(color[0], color[1], color[2]));
+  pixels.show();
+  delay(delayTime);
+  pixels.clear();
+  pixels.show();
+}
+// -----------------------------------------
+void LEDcycle (int color[3]){
+  for (int i=0; i<LEDS_NUM; i++) {
+    LEDR_COLOR(i,color,100);
+  }
+}
+// |================================================|
+
+
+
 // ========================================================================================
 // Create an instance of the TinyGPSPlus object
 TinyGPSPlus gps;
@@ -76,7 +119,17 @@ String message; //empty string
 LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RATE_9600); // -> this does too
 // -------------------------------------
 
+// =============================<< SETUP >======================================
 void setup() {
+
+// |=============< LED RING SETUP >==============|
+#if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
+  clock_prescale_set(clock_div_1);
+#endif
+pixels.begin(); 
+pixels.clear();
+pixels.show();
+// |=============================================|
 
   // Start the serial communication with the GPS module
   mySerial.begin(GPSBaud, SERIAL_8N1, RXPin, TXPin);
@@ -106,9 +159,9 @@ void setup() {
   // Send message
  //ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23, "Hello, world?");
  ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23,"Hello, world?");
-//////////////////////////////////////////
 
-//////////////////////////////////////////
+    LEDR_COLOR(8,chill, 1000);
+    LEDR_COLOR(8,pink, 1000);
   // Check If there is some problem of succesfully send
   Serial.println(rs.getResponseDescription());
 }
@@ -116,6 +169,8 @@ void setup() {
 /////
 
 void loop() {
+    LEDR_COLOR(0,dim_blue,1000);
+    delay(1000);
 
   // Read data from GPS module
   if (mySerial.available() > 0)
@@ -176,8 +231,9 @@ void loop() {
   if (Serial.available()) {
 	  String input = Serial.readString();
 	  ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(23, input);
-	  // Check If there is some problem of succesfully send
+	  // Check If there is some problem or? succesfully send
 	  Serial.println(rs.getResponseDescription());
+        LEDR_COLOR(8, green, 1000); 
   }
 }
 
@@ -236,4 +292,4 @@ void loop() {
 //	configuration.TRANSMISSION_MODE.enableRSSI = RSSI_DISABLED;
 //	configuration.TRANSMISSION_MODE.fixedTransmission = FT_FIXED_TRANSMISSION;
 //	configuration.TRANSMISSION_MODE.enableLBT = LBT_DISABLED;
-//	configuration.TRANSMISSION_MODE.WORPeriod = WOR_2000_011;
+//	configuration.TRANSMISSION_MODE.WORPeriod = WOR_2000_011LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01LCD Display GC9A01AAAAAAAAAAAAAAA;
