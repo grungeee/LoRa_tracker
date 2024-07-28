@@ -17,49 +17,6 @@ SCL 13
 // Hardware SPI on Feather or other boards
 Adafruit_GC9A01A tft(TFT_CS, TFT_DC);
 
-#include <Adafruit_GFX.h>
-#include <Adafruit_GC9A01A.h>
-#include <SPI.h>
-
-// Define the pins used for the display
-#define TFT_CS    5   // Chip select control pin
-#define TFT_RST   22  // Reset pin
-#define TFT_DC    21  // Data Command control pin
-#define TFT_SDA   23  // SPI Data (MOSI)
-#define TFT_SCL   18  // SPI Clock (SCK)
-
-// Create display object
-Adafruit_GC9A01A tft = Adafruit_GC9A01A(TFT_CS, TFT_DC, TFT_RST);
-
-// Define four variables to display
-float var1 = 12.34;
-float var2 = 56.78;
-float var3 = 90.12;
-float var4 = 34.56;
-
-void setup() {
-  // Initialize serial communication
-  Serial.begin(115200);
-  // Initialize the display
-  tft.begin();
-  // Rotate display (optional, adjust as needed)
-  tft.setRotation(1);
-  // Fill screen with black color
-  tft.fillScreen(GC9A01A_BLACK);
-  // Set text size
-  tft.setTextSize(2);
-  // Set text color
-  tft.setTextColor(GC9A01A_WHITE);
-}
-
-void loop() {
-  // Clear the display area before drawing new text
-  tft.fillRect(0, 0, 240, 240, GC9A01A_BLACK);
-  
-  // Set cursor to top-left corner
-  tft.setCursor(10, 20);
-  // Print the first variable
- 
 void setup() {
   Serial.begin(9600);
   Serial.println("GC9A01A Test!");
