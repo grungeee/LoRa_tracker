@@ -35,7 +35,7 @@ const uint32_t GPSBaud = 9600; // GPS module baud rate
 int chan = 23;
 String message; //empty string
 
-// ========================<<ESP32>>=====================================
+// ========================<< E220 >>=====================================
 // ---------- esp32 pins --------------
 #define TX_PIN 17 //  TX2  in example
 #define RX_PIN 16 //  RX2  in example
@@ -90,23 +90,24 @@ initializeLEDRing();
 
 // <================================<< LOOP >>=================================>
 void loop() {
+    LEDR_COLOR(0, dim_white, 1000);
+    delay(1000);
   // |================< LED Ring >==================|
     // ????? whyyyy
   //LEDR_COLOR(0, chill, 100);
-    
 
 
   // |================< GPS >==================|
-  // Read data from GPS module
-  if (mySerial.available() > 0)
+  if (mySerial.available() > 0)// Read data from GPS module
   {
+        LEDR_COLOR(5,red,100);
     // Feed the data into the TinyGPSPlus object
     gps.encode(mySerial.read());
 
     // Display information from the GPS module
     if (gps.location.isUpdated())
     {
-    message = "\n" + "Latitude: " + String(gps.location.lat(), 6) + "\n" + "Longitude: " + String(gps.location.lng(), 6) + "\n" "Altitude: " + String(gps.altitude.meters()) + "\n" + "Satellites: " + String(gps.satellites.value()) + "\n" + "HDOP: " + String(gps.hdop.value());
+    message = "\nLatitude: " + String(gps.location.lat(), 6) + "\nLongitude: " + String(gps.location.lng(), 6) + "\nAltitude: " + String(gps.altitude.meters()) + "\nSatellites: " + String(gps.satellites.value()) + "\nHDOP: " + String(gps.hdop.value());
     //message = String(gps.location.lat(), 6);
      ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(chan, message);
 //    LEDR_COLOR(8,blue,100);
