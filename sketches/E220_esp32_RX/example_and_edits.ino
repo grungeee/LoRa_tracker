@@ -1,3 +1,18 @@
+/*
+  // =========< LCD >=========
+  // Print the second variable
+  tft.fillRect(0, 0, 240, 240, GC9A01A_BLACK);
+  // Center text vertically and horizontally
+  int16_t x1, y1;
+  uint16_t w, h;
+  tft.setTextSize(2);
+  tft.setTextColor(GC9A01A_WHITE);
+  // Print in the center of the screena???
+  String text = "NO GPS DATA";
+  tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
+  tft.setCursor((240 - w) / 2, 90 - h / 2);
+  tft.print(text);
+
 
     // ------------------------ config ----------------------
 //	c = e220ttl.getConfiguration();

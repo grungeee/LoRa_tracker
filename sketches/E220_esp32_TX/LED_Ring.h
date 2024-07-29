@@ -13,13 +13,12 @@ extern Adafruit_NeoPixel pixels;
 extern int red[3];
 extern int green[3];
 extern int blue[3];
-extern int purple[3];
-extern int chill[3];
-extern int pink[3];
 extern int yellow[3];
+extern int purple[3];
+extern int pink[3];
+extern int chill[3];
 extern int dim_yellow[3];
 extern int dim_white[3];
-extern int dim_blue[3];
 
 // Function prototypes
 void initializeLEDRing();

@@ -12,7 +12,7 @@ int pink[3] = {125,10,10};
 int yellow[3] = {255, 255, 0};
 int dim_yellow[3] = {20, 20, 0};
 int dim_white[3] = {20, 20, 20};
-int dim_blue[3] = {0, 0, 20};
+int dim_red[3] = {20, 0, 0};
 
 // Function definitions
 void initializeLEDRing() {
@@ -80,7 +80,7 @@ void LEDcycle (int color[3]){
     void loopXTimes (int count){
     int loopIterValue = 0;
         for (int i = 0; i < count; i++) {
-            loopIterValue = i;
+    loopIterValue = i;
         }
     reutrn loopIterValue;
     }
