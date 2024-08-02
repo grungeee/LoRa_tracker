@@ -20,7 +20,7 @@ Adafruit_NeoPixel pixels(LEDS_NUM, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
   int green[3] = {0,255,0};
   int blue[3] = {0,0,255};
   int purple[3] = {255,0,255};
-  E220_uno_TX             │    2   │ ││  Longitude: 15.617960
+
 void LEDR_COLOR (int ledIndex, int color[3],int delayTime){
 
   pixels.clear();

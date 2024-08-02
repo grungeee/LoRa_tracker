@@ -34,7 +34,6 @@
 // and use relative configuration with RSSI enabled
 //#define ENABLE_RSSI true
 
-#include "LED_Ring.h"
 #include "Arduino.h"
 #include "LoRa_E220.h"
 #include <TinyGPSPlus.h>
@@ -73,12 +72,12 @@ String message; //empty string
 
 // LoRa_E220 e220ttl(&Serial2, 15, 21, 19); //  RX AUX M0 M1
 
-//LoRa_E2`20 e220ttl(&Serial2, 22, 4, 18, 21, 19, UART_BPS_RATE_9600); //  esp32 RX <-- e220 TX, esp32 TX --> e220 RX AUX M0 M1
+//LoRa_E220 e220ttl(&Serial2, 22, 4, 18, 21, 19, UART_BPS_RATE_9600); //  esp32 RX <-- e220 TX, esp32 TX --> e220 RX AUX M0 M1
 LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RATE_9600); // -> this does too
 // -------------------------------------
 
 void setup() {
-initializeLEDRing();
+
   // Start the serial communication with the GPS module
   mySerial.begin(GPSBaud, SERIAL_8N1, RXPin, TXPin);
   // Start the serial communication with the computer
@@ -118,7 +117,6 @@ initializeLEDRing();
 
 void loop() {
 
-  LEDR_COLOR(0, chill, 100);
   // Read data from GPS module
   if (mySerial.available() > 0)
   {
