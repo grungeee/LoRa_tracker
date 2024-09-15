@@ -14,7 +14,7 @@ int dim_yellow[3] = {20, 20, 0};
 int dim_white[3] = {20, 20, 20};
 int dim_blue[3] = {0, 0, 20};
 
-// Function definitions
+// Function definitions (Setup)
 void initializeLEDRing() {
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
   clock_prescale_set(clock_div_1);

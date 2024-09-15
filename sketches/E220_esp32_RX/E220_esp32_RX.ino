@@ -1,63 +1,34 @@
 #include "Arduino.h"
 #include "LoRa_E220.h"
-#include "HardwareSerial.h"
+
 
 #define FREQUENCY_868
 #define DESTINATION_ADDL BROADCAST_ADDRESS
+// ---------- esp32 pins --------------
 #define TX_PIN 17 //  TX2  in example
 #define RX_PIN 16 //  RX2  in example
 #define AUX_PIN 4 // 18 in exaple
 #define M0_PIN 2 // 19 in example
 #define M1_PIN 15 // 21 in example
-LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RATE_9600); // -> this does too
+/*
 
+#define TX_PIN 17 //  TX2  in example
+#define RX_PIN 16 //  RX2  in example
+#define AUX_PIN 4 // 18 in exaple
+#define M0_PIN 2 // 19 in example
+#define M1_PIN 15 // 21 in example
+*/
 
-#define MESSAGE_TYPE "HUMI"
-#define ROOM "Kitchen"
-#define PARAM "GPS"
+#define comChan 69 
 
-struct MessageLatitude {
-	char type[5];
-	char message[8];
-	byte value[4];
-};
-
-struct MessageLongtitude {
-	char type[5];
-	char message[8];
-	byte value[4];
-};
-
-struct MessageAltitude {
-	char type[5];
-	char message[8];
-	byte value[4];
-};
-
-struct MessageSatellites {
-	char type[5];
-	char message[8];
-	byte value;
-};
-
-struct MessageTemperature {
-	char type[5];
-	char message[8];
-	byte temperature[4];
-};
-
-struct MessageHumidity {
-	char type[5];
-	char message[8];
-	byte humidity;
-};
-
+// Define e220ttl object only if it's not defined
+LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RATE_9600);
 
 void setup() {
-    
   Serial.begin(115200);
   delay(500);
 
+  // Startup all pins and UART
   e220ttl.begin();
   Serial.println("Start receiving!");
 
@@ -91,77 +62,26 @@ c.close();
 
 void loop() {
 	// If something available
-	if (e220ttl.available() > 1) {
-		// read the String message
-		char type[5]; // first part of structure
-		ResponseContainer rs = e220ttl.receiveInitialMessage(sizeof(type));
-		String typeStr = rs.data;
+  if (e220ttl.available()>1) {
+	  Serial.println("Message received!");
 
-		// Is something goes wrong print error
-		if (rs.status.code != 1) {
-			Serial.println(rs.status.getResponseDescription());
-		} else {
-			Serial.println(typeStr);
-			if (typeStr == "TEMP") {
-				struct MessageTemperaturePartial {
-					char message[8];
-					byte temperature[4];
-				};
-
-				ResponseStructContainer rsc = e220ttl.receiveMessage( sizeof(MessageTemperaturePartial));
-				struct MessageTemperaturePartial message = *(MessageTemperaturePartial*) rsc.data;
-
-				Serial.println(*(float*)(message.temperature));
-				Serial.println(message.message);
-				rsc.close();
-			} else if (typeStr == "HUMI") {
-				struct MessageHumidityPartial {
-					char message[8];
-					byte humidity;
-				};
-
-
-				ResponseStructContainer rsc = e220ttl.receiveMessage(sizeof(MessageHumidityPartial));
-				struct MessageHumidityPartial message = *(MessageHumidityPartial*) rsc.data;
-
-				Serial.println(message.humidity);
-				Serial.println(message.message);
-				rsc.close();
-
-			} else if (typeStr == "LATI") {
-				struct MessageLatitudePartial {
-					char message[8];
-					byte value[4];
-				};
-
-				ResponseStructContainer rsc = e220ttl.receiveMessage(sizeof(MessageLatitudePartial));
-				struct MessageLatitudePartial message = *(MessageLatitudePartial*) rsc.data;
-
-				Serial.println(*(float*)(message.value));
-				Serial.println(message.message);
-				rsc.close();
-			} else {
-				Serial.println("Something goes wrong!!");
-			}
-		}
+	  // read the String message
+#ifdef ENABLE_RSSI
+	ResponseContainer rc = e220ttl.receiveMessageRSSI();
+#else
+	ResponseContainer rc = e220ttl.receiveMessage();
+#endif
+	// Is something goes wrong print error
+	if (rc.status.code!=1){
+		Serial.println(rc.status.getResponseDescription());
+	}else{
+		// Print the data received
+		Serial.println(rc.status.getResponseDescription());
+		Serial.println(rc.data);
+#ifdef ENABLE_RSSI
+		Serial.print("RSSI: "); Serial.println(rc.rssi, DEC);
+#endif
 	}
- 	if (Serial.available()) {
- 		if (MESSAGE_TYPE == "HUMI") {
- 			struct MessageHumidity message = { "HUMI", ROOM, 0 };
- 			message.humidity = Serial.parseInt();
-
- 	 		// Send message
- 	 		ResponseStatus rs = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, 23, &message, sizeof(MessageHumidity));
- 	 		// Check If there is some problem of succesfully send
- 	 		Serial.println(rs.getResponseDescription());
- 		} else {
- 			struct MessageTemperature message = { "TEMP", ROOM, 0 };
- 			*(float*)(message.temperature) = Serial.parseFloat();
-
- 	 		// Send message
- 	 		ResponseStatus rs = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, 23, &message, sizeof(MessageTemperature));
- 	 		// Check If there is some problem of succesfully send
- 	 		Serial.println(rs.getResponseDescription());
- 		}
- 	}
+  }
 }
+

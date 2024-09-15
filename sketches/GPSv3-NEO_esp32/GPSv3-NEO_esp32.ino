@@ -35,10 +35,12 @@ int comChan = 69;
 #define ROOM "Kitchen"
 #define PARAM "GPS"
 
-struct MessageAltitude {
+
+
+struct MessageHumidity {
 	char type[5];
 	char message[8];
-	byte value;
+	byte humidity;
 };
 
 struct MessageTemperature {
@@ -47,11 +49,30 @@ struct MessageTemperature {
 	byte temperature[4];
 };
 
-struct MessageHumidity {
+struct MessageLatitude {
 	char type[5];
 	char message[8];
-	byte humidity;
+	byte value[4];
 };
+
+struct MessageLongitude {
+	char type[5];
+	char message[8];
+	byte value[4];
+};
+
+struct MessageAltitude {
+	char type[5];
+	char message[8];
+	byte value[4];
+};
+
+struct MessageSatellites {
+	char type[5];
+	char message[8];
+	byte value;
+};
+
 
 void setup()
 {
@@ -119,7 +140,6 @@ void loop()
       Serial.print("HDOP: ");
       Serial.println(gps.hdop.value());
 
-     //ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(comChan,">>>>>>" + message);
             /*
      ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(comChan,"Latitude" + String(gps.location.lat(), 6));
      rs = e220ttl.sendBroadcastFixedMessage(comChan,"Latitude: " + String(gps.location.lat(), 6));
@@ -130,50 +150,42 @@ void loop()
      */
 
 
-
-  //struct	Message message = {"TEMP", ROOM, 19.2};
-  // Send message
-  //ResponseStatus rs = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, 69, &message, sizeof(Message));
-  // Check If there is some problem of succesfully send
-  //Serial.println(rs.getResponseDescription());
-  //struct	Message message = {"ALTI", ROOM, 19.2};
-  //struct MessageAltitude messageA = {"ALTI", PARAM, 270};
   //struct	Message message = {"lat", PARAM, 270};
-  // Send message
-
-//ResponseStatus rs = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, comChan, &messageA, sizeof(MessageAltitude));
-
-
-	// Send message
-
-    MessageTemperature messageT = { "TEMP", ROOM, 19.2 };
-    *(float*)(messageT.temperature) = 19.2;
-    
-
-    ResponseStatus rsT = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, comChan, &messageT, sizeof(MessageTemperature));
 
 //	struct MessageHumidity messageH = { "HUMI", ROOM, 80 };
 	// Send message
 //	ResponseStatus rsH= e220ttl.sendFixedMessage(0, DESTINATION_ADDL, 69, &messageH, sizeof(MessageHumidity));
 
-//	struct MessageTemperature messageT = { "TEMP", ROOM, 19.2};
-	// Check If there is some problem of succesfully send
-	// Check If there is some problem of succesfully send
-//ResponseStructContainer rsc = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, comChan, &message, sizeof(Message));
+   struct MessageTemperature messageT = { "TEMP", ROOM, 19.2 };
+    *(float*)(messageT.temperature) = 19.2;
+    ResponseStatus rsT = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, comChan, &messageT, sizeof(MessageTemperature));
 
-            /*
-		ResponseStructContainer rsc = e220ttl.receiveMessage(sizeof(Message));
 
-		// Print the data received
-		Serial.println(rsc.status.getResponseDescription());
-		struct Message message = *(Message*) rsc.data;
-		Serial.println(message.type);
-		Serial.println(message.message);
-		Serial.println(message.temperature);
+
+    struct MessageLatitude messageLat = { "LATI", PARAM, 0};
+   // *(float*)(messageLat.value) = gps.location.lat();
+    *(float*)(messageLat.value) = 42.424212;
+    ResponseStatus rsL = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, comChan, &messageLat, sizeof(MessageLatitude));
+
+/*
+    MessageLongitude messageLng = { "LONG", PARAM, 0 };
+    *(float*)(messageLng.value) = gps.location.lng();  // Cast and assign longitude to byte array
+
+    ResponseStatus rsLo = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, comChan, &messageLng, sizeof(MessageLongitude));
+
+
+    MessageAltitude messageAlt = { "ALTI", PARAM, 0 };
+    *(float*)(messageAlt.value) = gps.altitude.meters();  // Cast and assign altitude to byte array
+    ResponseStatus rsA = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, comChan, &messageAlt, sizeof(MessageAltitude));
+
+
+    MessageSatellites messageSat = { "SATS", PARAM, 0};
+    ResponseStatus rsS = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, comChan, &messageSat, sizeof(MessageSatellites));
+
             */
+
+
+
     }
   }
-    
-     //ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(69, "GPS GUCCI: " + String(gps.satellites.value()));
-
 }

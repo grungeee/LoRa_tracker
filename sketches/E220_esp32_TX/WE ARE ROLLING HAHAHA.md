@@ -191,7 +191,7 @@ void loop() {
 	}else{
 		// Print the data received
 		Serial.println(rc.status.getResponseDescription());
-		Serial.println(rc.data);
+	Serial.println(rc.data);
 #ifdef ENABLE_RSSI
 		Serial.print("RSSI: "); Serial.println(rc.rssi, DEC);
 #endif

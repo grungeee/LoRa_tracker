@@ -67,7 +67,7 @@ void loop() {
     }
 */
 
-  float segment = 360/LED_NUM;
+  float segment = 360/LED_NUM;#ifndef E220_TTL_DEFINED
   float gxs = 40;
   float GX_loop = gxs;
   float x = GX_loop / segment;
