@@ -34,20 +34,20 @@
 - [x] 16Bit LEd-Ring
     - it works, the actual code is dependant on the GPS and GY        
 
-- [] 1.28" LCD
+- [ ] 1.28" LCD
     - could use it for troubleshooting atm, actual UX/UI is the last thing that needs to be done
 
-- [] GY-9250
+- [ ] GY-9250
     - got some work done on GY-512
     - need to redo for compass
     - fuck none of the GYros I got have magnetometer working. WHY T_T
 
-- [] Power
+- [ ] Power
     - used a tiny USB-C charging board (USB/IN,BAT,OUT[5V])
     - need 18650 with lower current, 40A ain't charging
     - StepDown for ESP32!
 
-- [] Enclosure
+- [ ] Enclosure
     - The one I made was a chaos. At least it holds the protoboard with components on it.
 
 
