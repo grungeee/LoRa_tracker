@@ -65,6 +65,8 @@ c.close();
 
 }
 
+
+/*
 void loop()
 {
   Serial.println("Hi, I'm going to send message!");
@@ -73,3 +75,74 @@ void loop()
   ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(69, String(count));
   count =+
 }
+*/
+
+void loop() {
+  // Set an LED to blue
+  LEDR_COLOR(8, blue, 500);
+
+  // Send a message
+  Serial.println("Sending...[Greet4]");
+  e220ttl.sendMessage("Hello, my name is UNO4! What's your name?");
+  delay(500);
+
+  // Receive message
+  ResponseContainer rc = e220ttl.receiveMessage();
+  if (rc.status.code == 1) {
+    Serial.println("Receiving...");
+    Serial.println(rc.data);
+
+    Serial.println("Answering...");
+    e220ttl.sendMessage("Hi, my name is UNO4");
+
+    if (rc.data == "") {
+      Serial.println("Can't hear anything...");
+    }
+
+    LEDR_COLOR(8, green, 500);
+  } else {
+    Serial.println("So lonely :(");
+    for (int i = 0; i < LEDS_NUM; i++) {
+      LEDR_COLOR(i, green, 100);
+    }
+  }
+}
+
+
+// --------- E220 reieved data ---------
+  ResponseContainer rc = e220ttl.receiveMessage();
+// --------- E220 reieved data ---------
+  if (rc.status.code == 1) {
+    Serial.println("Receiving...");
+    Serial.println(rc.data);
+
+    Serial.println("Answerting...");
+    e220ttl.sendMessage("Hi, my name is UNO4");
+    if (rc.data == "")
+      {
+      Serial.println("cant hear anything...");
+      }
+
+// --------------- LED RING ----------------
+ // LEDR_COLOR(8,green, 500);
+//pixels.clear();
+//pixels.show();
+//pixels.setPixelColor(8, pixels.Color(0, 255, 0));
+//pixels.show();
+
+//delay(500);
+//pixels.clear();
+//pixels.show();
+// -----------------------------------------
+
+ }
+  else {
+    Serial.println("so lonely :(");
+    for (int i = 0; i < LEDS_NUM; i++) {
+// --------------- LED RING ----------------
+      LEDR_COLOR(i,green, 100);
+    }
+// -----------------------------------------
+  }
+}
+
