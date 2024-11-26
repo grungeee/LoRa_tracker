@@ -61,26 +61,29 @@ c.close();
 }
 
 void loop() {
-	// If something available
+	// If something is available
   if (e220ttl.available()>1) {
 	  Serial.println("Message received!");
 
 	  // read the String message
-#ifdef ENABLE_RSSI
-	ResponseContainer rc = e220ttl.receiveMessageRSSI();
-#else
-	ResponseContainer rc = e220ttl.receiveMessage();
-#endif
+//fdef ENABLE_RSSI
+// ResponseContainer rc = e220ttl.receiveMessageRSSI();
+//lse
+// ResponseContainer rc = e220ttl.receiveMessage();
+//ndif
+
+ResponseContainer rc = e220ttl.receiveMessage();
 	// Is something goes wrong print error
 	if (rc.status.code!=1){
 		Serial.println(rc.status.getResponseDescription());
 	}else{
-		// Print the data received
+		// Print the received data 
 		Serial.println(rc.status.getResponseDescription());
 		Serial.println(rc.data);
-#ifdef ENABLE_RSSI
-		Serial.print("RSSI: "); Serial.println(rc.rssi, DEC);
-#endif
+
+//#ifdef ENABLE_RSSI
+//		Serial.print("RSSI: "); Serial.println(rc.rssi, DEC);
+//#endif
 	}
   }
 }
