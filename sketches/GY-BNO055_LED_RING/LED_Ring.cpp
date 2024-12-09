@@ -36,7 +36,7 @@ void LEDR_COLOR(int ledIndex, int color[3], int delayTime) {
 }
 
 void LEDcycle(int color[3]) {
-  for (int i = 0; i < LEDS_NUM; i++) {
+  for (int i  = 0 + FIRST_LED; i < LEDS_NUM; i++) {
     LEDR_COLOR(i, color, 100);
   }
 }

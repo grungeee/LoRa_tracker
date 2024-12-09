@@ -6,6 +6,7 @@
 // Pin and LED configuration
 #define LED_RING_PIN 5
 #define LEDS_NUM 12
+#define FIRST_LED 0
 
 extern Adafruit_NeoPixel pixels;
 
