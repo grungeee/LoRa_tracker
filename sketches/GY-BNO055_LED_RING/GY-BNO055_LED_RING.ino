@@ -25,6 +25,11 @@ int calc_led_index(float angle) {
   // automatically round to the nearest LED position.
   float shifted = angle + HEADING_OFFSET + segment / 2.0f;
   int index = ((int)(shifted / segment)) % leds_count; // convert to 0..(LEDS_NUM-1)
+
+  // The physical LED wiring starts one position clockwise from
+  // the angle 0°/north. Bumping the index by one compensates for
+  // that so LED 1 lights when facing north.
+  index = (index + 1) % leds_count;
   return index + FIRST_LED;                // some rings start at LED 1
 }
 //////////////
