@@ -1,5 +1,6 @@
 // =========================<< GPS >>================================
 #include "GPS_Module.h"
+#include "Arduino.h"
 
 
 TinyGPSPlus gps; // Create an instance of the TinyGPSPlus object
@@ -33,6 +34,20 @@ String getGPSData() {
   } else {
     return "NO GPS DATA";
   }
+}
+
+bool gpsDetected() {
+  static unsigned long lastCheck = 0;
+  static unsigned long lastChars = 0;
+  if (millis() - lastCheck > 2000) {
+    if (gps.charsProcessed() == lastChars) {
+      lastCheck = millis();
+      return false;
+    }
+    lastChars = gps.charsProcessed();
+    lastCheck = millis();
+  }
+  return true;
 }
 
 
