@@ -43,7 +43,8 @@ LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RA
 
 // =========================<<GPS>>======================================
 TinyGPSPlus gps; // Create an instance of the TinyGPSPlus object
-HardwareSerial mySerial(1); // Create an instance of HardwareSerial object
+//HardwareSerial mySerial(1); // Create an instance of HardwareSerial object
+HardwareSerial gpsSerial(1); // Create an instance of HardwareSerial object
 const int RXPinGPS = 33; // RX pin of ESP32 connected to TX of GPS module
 const int TXPinGPS = 32; // TX pin of ESP32 connected to RX of GPS module
 const uint32_t GPSBaud = 9600; // GPS module baud rate
@@ -59,7 +60,9 @@ initializeLEDRing();
 
 // ==========< GPS Setup  >==========|
   
-  mySerial.begin(GPSBaud, SERIAL_8N1, RXPinGPS, TXPinGPS); // Start the serial communication with the GPS module
+  //mySerial.begin(GPSBaud, SERIAL_8N1, RXPinGPS, TXPinGPS); // Start the serial communication with the GPS module
+  gpsSerial.begin(GPSBaud, SERIAL_8N1, RXPinGPS, TXPinGPS); // Start the serial communication with the GPS module
+
   // Start the serial communication with the computer
   Serial.begin(115200);
 
@@ -123,11 +126,11 @@ void loop() {
 
   // |================< GPS >==================|
   //if (mySerial.available() > 0)// Read data from GPS module
-  if (mySerial.available() = 0)// Read data from GPS module
+  if (gpsSerial.available() > 0)// Read data from GPS module
   {
         LEDR_COLOR(5,red,100);
     // Feed the data into the TinyGPSPlus object
-    gps.encode(mySerial.read());
+    gps.encode(gpsSerial.read());
     // Display information from the GPS module
     if (gps.location.isUpdated())
     {
@@ -188,7 +191,7 @@ void loop() {
   if (Serial.available()) {
 	  String input = Serial.readString();
 	  ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(69, input);
-	  // Check If there is some problem of succesfully send
+	  // Check If there is some problem or succesfully send
 	  Serial.println(rs.getResponseDescription());
   }
 }
