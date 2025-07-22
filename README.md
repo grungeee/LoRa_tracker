@@ -1,59 +1,64 @@
 # LoRa_tracker
 
-## Description
+## Hardware requirements
 
-### LoRa_tracker
+- Arduino Uno or ESP32 development board (examples use the **ESP32 Dev Module**)
+- Ebyte E220 LoRa module
+- NEO GPS module with antenna
+- BNO055 or GY-9250 IMU
+- 1.28" LCD display
+- 16-bit WS2812 LED ring
+- Power supply (LiPo battery, step-up and step-down modules)
+- Breadboard and wiring
 
+## Building the main sketch
 
-### Materials
+The `GY-BNO055_LED_RING` example demonstrates the core functionality of
+reading orientation data and driving the LED ring. It can be compiled
+with either the Arduino IDE or PlatformIO.
 
-- Arduino Uno
-- Breadboard
+### Arduino IDE
+1. Install the Espressif **ESP32** boards through the Board Manager and
+   select `ESP32 Dev Module`.
+2. Copy the folders from `libraries/` into your Arduino libraries directory.
+3. Open `sketches/GY-BNO055_LED_RING/GY-BNO055_LED_RING.ino` and press
+   **Upload**.
 
-- LoRa Module
-- GPS Module (With GPS Antenna)
-- __GY-9250__ (update the list!)
-- 1.28" LCD
-- 16Bit LED-Ring
+### PlatformIO
+1. Create a new project with the `esp32dev` board.
+2. Add the libraries listed below to the `lib_deps` section of
+   `platformio.ini`.
+3. Place the contents of `sketches/GY-BNO055_LED_RING` into the `src`
+   directory and run `platformio run`.
 
-- Power
-    - Lipo
-    - StepUp
-    - StepDown
+### Dependencies
 
-### Progress Functionality
+- `EByte_LoRa_E220_library`
+- `TinyGPSPlus`
+- `Adafruit_BNO055` and `Adafruit_Unified_Sensor`
+- `Adafruit_NeoPixel`
+- Display libraries such as `Adafruit_GC9A01A` if using the LCD
 
+A copy of these libraries is included in the `libraries/` folder.
 
-- [x] LoRa Module
-    - works on Arduino
-    - works on esp32
+### Project status
 
-- [x] GPS Module
-    - worked like a charm both on arduino and esp32
+- [x] LoRa Module works on Arduino and ESP32
+- [x] GPS Module verified on both platforms
+- [x] 16-bit LED ring operational
+- [ ] 1.28" LCD used for troubleshooting only
+- [ ] GY-9250 compass needs more work
+- [ ] Power system under development
+- [ ] Enclosure still experimental
 
-- [x] 16Bit LEd-Ring
-    - it works, the actual code is dependant on the GPS and GY        
+## License
 
-- [ ] 1.28" LCD
-    - could use it for troubleshooting atm, actual UX/UI is the last thing that needs to be done
-
-- [ ] GY-9250
-    - got some work done on GY-512
-    - need to redo for compass
-    - fuck none of the GYros I got have magnetometer working. WHY T_T
-
-- [ ] Power
-    - used a tiny USB-C charging board (USB/IN,BAT,OUT[5V])
-    - need 18650 with lower current, 40A ain't charging
-    - StepDown for ESP32!
-
-- [ ] Enclosure
-    - The one I made was a chaos. At least it holds the protoboard with components on it.
-
-
-    
+This project is licensed under the terms of the [MIT License](LICENSE).
 
 ## Example GPS LoRa sketches
 
-Two example sketches demonstrate sending GPS data over an E220 LoRa radio. `GPSv3_esp32_LoRa_TX` reads the NEO GPS on an ESP32 and sends latitude, longitude, altitude and satellite count as a binary structure. `GPSv3_esp32_LoRa_RX` receives the structure and prints the values to the serial monitor.
-
+Two example sketches demonstrate sending GPS data over an E220 LoRa radio.
+`GPSv3_esp32_LoRa_TX` reads the NEO GPS on an ESP32 and sends latitude,
+longitude, altitude and satellite count as a binary structure.
+`GPSv3_esp32_LoRa_RX` receives the structure and prints the values to the
+serial monitor.
