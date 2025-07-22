@@ -33,27 +33,27 @@ void displayGPSData(float latitude, float longitude, float altitude, int satelli
 
   text = "lng: " + String(longitude, 6);
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
-  tft.setCursor((240 - w) / 2, 90 - h / 2);
+  tft.setCursor((240 - w) / 2, 60 - h / 2);
   tft.print(text);
 
   text = "alt: " + String(altitude);
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
-  tft.setCursor((240 - w) / 2, 140 - h / 2);
+  tft.setCursor((205 - w) / 2, 80 - h / 2);
   tft.print(text);
 
-  text = "sat:" + String(satellites);
+  text = "sat: " + String(satellites);
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
-  tft.setCursor((240 - w) / 2, 190 - h / 2);
+  tft.setCursor((145 - w) / 2, 100 - h / 2);
   tft.print(text);
 
-  text = "dist:" + String(distance, 1) + "m";
+  text = "dist: " + String(distance, 1) + "m";
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
-  tft.setCursor((240 - w) / 2, 210);
+  tft.setCursor((185 - w) / 2, 120);
   tft.print(text);
 
-  text = "dir:" + String(bearing, 1);
+  text = "dir: " + String(bearing, 1);
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
-  tft.setCursor((240 - w) / 2, 230);
+  tft.setCursor((175 - w) / 2, 140);
   tft.print(text);
 
 }

@@ -14,7 +14,7 @@ struct GpsData {
 
 const float rxLat = 47.963230;
 const float rxLon = 16.196234;
-const float rxAlt = 300.0;
+const float rxAlt = 279.0;
 
 double calculateDistance(double lat1, double lon1, double alt1, double lat2, double lon2, double alt2) {
   const double R = 6371000.0; // meters
@@ -47,6 +47,7 @@ void setup() {
 
 void loop() {
   if (e220ttl.available() > 1) {
+    LEDR_COLOR(0, dim_blue, 100);
     ResponseStructContainer rsc = e220ttl.receiveMessage(sizeof(GpsData));
     if (rsc.status.code == 1) {
       GpsData data = *(GpsData*)rsc.data;
