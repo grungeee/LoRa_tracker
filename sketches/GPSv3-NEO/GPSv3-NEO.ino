@@ -1,11 +1,12 @@
 #include <TinyGPS++.h>
-#include <SoftwareSerial.h>
+#include "SoftwareSerial.h"
 
 // Create a TinyGPS++ object
 TinyGPSPlus gps;
 
 // Define the serial pins for GPShow to wire them up
-SoftwareSerial ss(2, 3); // RX, TX
+//SoftwareSerial ss(2, 3); // RX, TX
+SoftwareSerial ss(33, 32); // RX, TX
 
 void setup() {
   // Start the serial communication with the GPS module

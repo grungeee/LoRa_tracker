@@ -16,11 +16,23 @@
 
 #define comChan 69
 
+
+// <================================<< STRUCT >>================================>
+// hier?
+struct GpsData {
+    float lat;
+    float lon;
+    float alt;
+    uint8_t sat;
+};
+
+
 extern LoRa_E220 e220ttl;
 
 void initE220();
 void configE220();
 void sendE220Message(int channel, const String& message);
 void receiveE220Message();
+void gpsDataRX();
 
 #endif

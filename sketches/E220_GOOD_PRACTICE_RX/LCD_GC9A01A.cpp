@@ -20,6 +20,7 @@ void clearLCD() {
 }
 
 void displayGPSData(float latitude, float longitude, float altitude, int satellites, float distance, float bearing) {
+
   clearLCD();
 
   int16_t x1, y1;
@@ -54,6 +55,7 @@ void displayGPSData(float latitude, float longitude, float altitude, int satelli
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
   tft.setCursor((240 - w) / 2, 140);
   tft.print(text);
+
 }
 
 void displayNoGPSData() {

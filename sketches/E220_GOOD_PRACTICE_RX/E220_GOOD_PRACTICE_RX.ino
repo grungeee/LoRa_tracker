@@ -36,7 +36,6 @@ double calculateBearing(double lat1, double lon1, double lat2, double lon2) {
   if (brng < 0) brng += 360.0;
   return brng;
 }
-
 void setup() {
   Serial.begin(115200);
   initLCD();
@@ -60,6 +59,7 @@ void loop() {
       Serial.print(F(" Dist:")); Serial.print(distance, 1);
       Serial.print(F(" Dir:")); Serial.println(bearing, 1);
       displayGPSData(data.lat, data.lon, data.alt, data.sat, distance, bearing);
+
       LEDR_COLOR(0, dim_green, 100);
     } else {
       Serial.println(rsc.status.getResponseDescription());
