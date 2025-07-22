@@ -23,6 +23,7 @@ int calc_led_index(float angle) {
   // Shift the angle so LED 0 lines up with north.
   // Adding half a segment lets us use integer division to
   // automatically round to the nearest LED position.
+
   float shifted = angle + HEADING_OFFSET + segment / 2.0f;
   int index = ((int)(shifted / segment)) % leds_count; // convert to 0..(LEDS_NUM-1)
 
@@ -36,10 +37,12 @@ int calc_led_index(float angle) {
 
 float heading(){
   // Ask the BNO055 for its fused orientation in Euler angles.
-  // We'll use the yaw value (X axis) but negate it so the LEDs
+
+  // The x value is yaw (rotation around the vertical axis) which
+  // effectively gives us the compass heading in degrees.
   // advance clockwise when the device rotates clockwise.
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-  float h = -euler.x();  // negative yaw gives us the heading
+  float h = -euler.x();  // 0° = north, 90° = east
 
   // The sensor can return negative angles, e.g. -45° for 315°.
   if (h < 0) {
@@ -68,9 +71,11 @@ void setup() {
 }
 
 void loop() {
+  LEDR_COLOR(FIRST_LED, dim_yellow, 300); // this one is for testing only (lights the _first_ LED) 
   float angle = heading();            // 1) get current heading
   int index = calc_led_index(angle);  // 2) map it to the LED position
-  LEDR_COLOR(index, purple, 300);     // 3) light that LED in purple
+  LEDR_COLOR(index, dim_purple, 300);     // 3) light that LED in purple
+
   delay(1000);  // update about once a second
 }
 
