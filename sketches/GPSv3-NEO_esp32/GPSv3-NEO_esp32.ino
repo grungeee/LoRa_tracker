@@ -161,7 +161,6 @@ void loop()
     ResponseStatus rsT = e220ttl.sendFixedMessage(0, DESTINATION_ADDL, comChan, &messageT, sizeof(MessageTemperature));
 
 
-
     struct MessageLatitude messageLat = { "LATI", PARAM, 0};
    // *(float*)(messageLat.value) = gps.location.lat();
     *(float*)(messageLat.value) = 42.424212;

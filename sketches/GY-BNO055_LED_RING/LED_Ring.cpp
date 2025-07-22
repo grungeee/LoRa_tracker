@@ -15,6 +15,7 @@ int dim_white[3] = {10, 10, 10};
 int dim_red[3] = {20, 0, 0};
 int dim_green[3] = {0, 20, 0};
 int dim_blue[3] = {0, 0, 20};
+int dim_purple[3] = {25,0,25};
 
 // Function definitions
 void initLED() {
@@ -36,7 +37,7 @@ void LEDR_COLOR(int ledIndex, int color[3], int delayTime) {
 }
 
 void LEDcycle(int color[3]) {
-  for (int i  = 0 + FIRST_LED; i < LEDS_NUM; i++) {
+  for (int i = 0; i < LEDS_NUM; i++) {
     LEDR_COLOR(i, color, 100);
   }
 }
