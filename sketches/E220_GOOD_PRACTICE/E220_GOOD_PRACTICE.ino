@@ -1,109 +1,66 @@
 /*
- _____ ____  ____   ___    _______  __
-| ____|___ \|___ \ / _ \  |_   _\ \/ /
-|  _|   __) | __) | | | |   | |  \  / 
-| |___ / __/ / __/| |_| |   | |  /  \ 
-|_____|_____|_____|\___/    |_| /_/\_\
-*/
+ * Simple tracker demo with E220 LoRa radio, GPS and BNO055 IMU.
+ * Sends GPS coordinates and heading over LoRa and shows received
+ * data on the serial monitor and LCD. If the GPS is missing or
+ * provides no data a warning is printed.
+ */
 
-// <===============================<< INCLUDES >================================>
 #include "Arduino.h"
-//#include "LoRa_E220.h"
-//#include <TinyGPSPlus.h>
-//#include <HardwareSerial.h>
-#include "E220.h" // (from a custom file)
-#include "LED_Ring.h" // (from a custom file)
-#include "LCD_GC9A01A.h" // (from a custom file
-#include "GPS_Module.h" // (from a custom file)
+#include "E220.h"
+#include "LED_Ring.h"
+#include "LCD_GC9A01A.h"
+#include "GPS_Module.h"
+#include "GY_BNO055.h"
 
+unsigned long gpsInitTime = 0;
 
-// ------------------------------------------------------------------------------
-
-// <================================<< SETUP >>=================================>
-//
 void setup() {
-// ==========< pre init  >==========|
   Serial.begin(115200);
-  while (!Serial); // wait for serial port to connect. Needed for native USB
-// ==========<   INIT    >==========|
-  initLCD(); 
+  while (!Serial);
+
+  Serial.println("Initializing LCD...");
+  initLCD();
+  Serial.println("Initializing LED ring...");
   initLED();
+  Serial.println("Initializing E220...");
   initE220();
   configE220();
+  Serial.println("Initializing GPS...");
   initGPS();
+  gpsInitTime = millis();
+  Serial.println("Initializing BNO055...");
+  initBNO();
 
-  sendE220Message(comChan, "Initialized! ... Hello, world?");
-  delay(500);
+  sendE220Message(comChan, "Initialized");
   LEDcycle(yellow);
 }
 
-// <================================<< LOOP >>=================================>
 void loop() {
-  // |=============< E220 Communication >==============|
-  // === RX ===
+  // receive incoming messages
+  receiveE220Message();
+  gpsDataRX();
 
-//receiveE220Message();
-//ResponseContainer rc = e220ttl.receiveMessage();
+  bool gpsUpdated = updateGPS();
+  bool gpsOk = isGPSAvailable();
 
-gpsDataRX();
-LEDcycle(pink);
-
-  // === TX ===
-sendE220Message(comChan, "Can you hear me?");
-//sendE220Message(comChan, "Please, send me a message!");
-  LEDR_COLOR(1, dim_blue, 100);
-  if (rsc.status.code != 1)
-  {
-  LEDR_COLOR(15, dim_red, 100);
-  }else{
-  Serial.println(rsc.data);
-  LEDR_COLOR(15, dim_green, 100);
+  if (gpsUpdated) {
+    displayGPSData(gps.location.lat(), gps.location.lng(),
+                   gps.altitude.meters(), gps.satellites.value());
+    float heading = readHeading();
+    int index = headingToLed(heading);
+    LEDR_COLOR(index, dim_purple, 50);
+    sendE220Message(comChan, getGPSData() + "\nHeading:" + String(heading, 1));
+  } else {
+    if (!gpsOk && millis() - gpsInitTime > 5000) {
+      Serial.println("GPS MODULE NOT FOUND");
+      displayNoGPSData();
+      sendE220Message(comChan, "NO GPS MODULE");
+    } else {
+      Serial.println("NO GPS DATA");
+      displayNoGPSData();
+      sendE220Message(comChan, "NO GPS DATA");
+    }
   }
 
-  // |================< GPS >==================|
-  // Read data from GPS module
-  if (gpsSerial.available() > 0)
-  {
-  LEDR_COLOR(7, dim_blue, 100);
-  LEDR_COLOR(8, dim_blue, 100);
-  LEDR_COLOR(9, dim_blue, 100);
-    // Feed the data into the TinyGPSPlus object
-    gps.encode(gpsSerial.read());
-
-    // Display information from the GPS module
-    if (gps.location.isUpdated())
-    {
-    // ===============< LCD >==============|
-      displayGPSData(gps.location.lat(), gps.location.lng(), gps.altitude.meters(), gps.satellites.value());
-    // ===============< E220 >==============|
-      sendE220Message(comChan, getGPSData());
-// =================================================
-
-  LEDR_COLOR(7, dim_green, 100);
-  LEDR_COLOR(8, dim_green, 100);
-  LEDR_COLOR(9, dim_green, 100);
-      Serial.print("Latitude: ");
-      Serial.println(gps.location.lat(), 6);
-      Serial.print("Longitude: ");
-      Serial.println(gps.location.lng(), 6);
-      Serial.print("Altitude: ");
-      Serial.println(gps.altitude.meters());
-      Serial.print("Satellites: ");
-      Serial.println(gps.satellites.value());
-      Serial.print("HDOP: ");
-      Serial.println(gps.hdop.value());
-    }
-  } else {
-  LEDR_COLOR(7, dim_red, 100);
-  LEDR_COLOR(8, dim_red, 100);
-  LEDR_COLOR(9, dim_red, 100);
-    displayNoGPSData();
-    }
-
-  // |=============< E220 Communication >==============|
-//receiveE220Message();
-
-  /// end loop ///
+  delay(1000);
 }
-
-

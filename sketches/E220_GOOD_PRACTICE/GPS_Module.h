@@ -11,5 +11,6 @@ extern HardwareSerial gpsSerial;
 void initGPS();
 bool updateGPS();
 String getGPSData();
+bool isGPSAvailable();
 
 #endif
