@@ -32,34 +32,34 @@ void configE220() {
   Serial.println("E220 module configured");
 }
 
-void sendE220Message(int channel, const String& message) {
-  ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(comChan, message);
-  //Serial.println(rs.getResponseDescription());
+ResponseStatus sendE220Message(int channel, const String& message) {
+  ResponseStatus rs = e220ttl.sendBroadcastFixedMessage(channel, message);
+  return rs;
 }
 
 
-void receiveE220Message() {
-	// If something available
+ResponseContainer receiveE220Message() {
+  ResponseContainer result;
+  result.status.code = ERR_E220_NO_RESPONSE_FROM_DEVICE;
   if (e220ttl.available() > 1) {
-	  // read the String message
 #ifdef ENABLE_RSSI
-	ResponseContainer rc = e220tt.receiveMessageRSSI();
+    result = e220ttl.receiveMessageRSSI();
 #else
-	ResponseContainer rc = e220ttl.receiveMessage();
+    result = e220ttl.receiveMessage();
 #endif
-	// Is something goes wrong print error
-	if (rc.status.code!=1){
-		Serial.println(rc.status.getResponseDescription());
-	}else{
-		// Print the data received
-	//	Serial.println(rc.status.getResponseDescription());
-		Serial.println(rc.data);
+    if (result.status.code != E220_SUCCESS) {
+      Serial.println(result.status.getResponseDescription());
+    } else {
+      Serial.println(result.data);
 #ifdef ENABLE_RSSI
-		Serial.print("RSSI: "); Serial.println(rc.rssi, DEC);
+      Serial.print("RSSI: ");
+      Serial.println(result.rssi, DEC);
 #endif
+    }
   }
+  return result;
 }
-}
+
 
 
 
@@ -70,7 +70,7 @@ void receiveE220Message() {
   if (e220ttl.available()>1) {
 	  // read the String message
 #ifdef ENABLE_RSSI
-	ResponseContainer rc = e220tt.receiveMessageRSSI();
+        ResponseContainer rc = e220ttl.receiveMessageRSSI();
 #else
 	ResponseContainer rc = e220ttl.receiveMessage();
 #endif
