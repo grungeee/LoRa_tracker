@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include "LoRa_E220.h"
+
 #include <math.h>
 
 #define FREQUENCY_868
@@ -72,6 +73,7 @@ void loop() {
         ResponseStructContainer rsc = e220.receiveMessage(sizeof(GpsData));
         if (rsc.status.code == 1) {
             GpsData data = *(GpsData*)rsc.data;
+
             double distance = calculateDistance(rxLat, rxLon, rxAlt, data.lat, data.lon, data.alt);
             double bearing = calculateBearing(rxLat, rxLon, data.lat, data.lon);
             Serial.print(F("Lat: ")); Serial.print(data.lat, 6);
@@ -80,6 +82,7 @@ void loop() {
             Serial.print(F(" Sat: ")); Serial.print(data.sat);
             Serial.print(F(" Dist: ")); Serial.print(distance, 1);
             Serial.print(F(" Dir: ")); Serial.println(bearing, 1);
+
         } else {
             Serial.println(rsc.status.getResponseDescription());
         }

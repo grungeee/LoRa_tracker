@@ -3,7 +3,7 @@
 Adafruit_NeoPixel pixels(LEDS_NUM, LED_RING_PIN, NEO_GRB + NEO_KHZ800);
 
 // Color definitions
-nt red[3] = {255,0,0};
+int red[3] = {255,0,0};
 int green[3] = {0,255,0};
 int blue[3] = {0,0,255};
 int purple[3] = {255,0,255};
