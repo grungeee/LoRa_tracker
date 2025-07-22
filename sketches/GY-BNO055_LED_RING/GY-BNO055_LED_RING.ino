@@ -36,10 +36,10 @@ int calc_led_index(float angle) {
 
 float heading(){
   // Ask the BNO055 for its fused orientation in Euler angles.
-  // We'll use the sensor's Z axis (pitch) instead of the usual yaw
-  // so rotating the device forward/backward changes the LED.
+  // We'll use the yaw value (X axis) but negate it so the LEDs
+  // advance clockwise when the device rotates clockwise.
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-  float h = euler.z();  // using pitch as the heading
+  float h = -euler.x();  // negative yaw gives us the heading
 
   // The sensor can return negative angles, e.g. -45° for 315°.
   if (h < 0) {
