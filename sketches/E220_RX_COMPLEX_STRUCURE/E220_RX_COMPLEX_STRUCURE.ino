@@ -12,6 +12,7 @@
 LoRa_E220 e220ttl(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RATE_9600); // -> this does too
 
 
+// REMOVE THIS LATER
 #define MESSAGE_TYPE "HUMI"
 #define ROOM "Kitchen"
 #define PARAM "GPS"

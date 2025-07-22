@@ -14,7 +14,7 @@ struct GpsData {
 
 const float rxLat = 47.963230;
 const float rxLon = 16.196234;
-const float rxAlt = 300.0;
+const float rxAlt = 279.0;
 
 double calculateDistance(double lat1, double lon1, double alt1, double lat2, double lon2, double alt2) {
   const double R = 6371000.0; // meters
