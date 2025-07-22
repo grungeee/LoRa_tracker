@@ -19,7 +19,8 @@ void clearLCD() {
   tft.fillScreen(GC9A01A_BLACK);
 }
 
-void displayGPSData(float latitude, float longitude, float altitude, int satellites) {
+void displayGPSData(float latitude, float longitude, float altitude, int satellites, float distance, float bearing) {
+
   clearLCD();
 
   int16_t x1, y1;
@@ -44,6 +45,17 @@ void displayGPSData(float latitude, float longitude, float altitude, int satelli
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
   tft.setCursor((240 - w) / 2, 190 - h / 2);
   tft.print(text);
+
+  text = "dist:" + String(distance, 1) + "m";
+  tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
+  tft.setCursor((240 - w) / 2, 210);
+  tft.print(text);
+
+  text = "dir:" + String(bearing, 1);
+  tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
+  tft.setCursor((240 - w) / 2, 230);
+  tft.print(text);
+
 }
 
 void displayNoGPSData() {

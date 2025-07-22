@@ -56,5 +56,5 @@
 ## Example GPS LoRa sketches
 
 Two example sketches demonstrate sending GPS data over an E220 LoRa radio. `GPSv3_esp32_LoRa_TX` reads the NEO GPS on an ESP32 and sends latitude, longitude, altitude and satellite count as a binary structure. `GPSv3_esp32_LoRa_RX` receives the structure and prints the values to the serial monitor.
-`E220_GOOD_PRACTICE_RX` extends the receiver by integrating the LED ring and round LCD used in the good practice example to display the incoming coordinates.
+`E220_GOOD_PRACTICE_RX` extends the receiver by integrating the LED ring and round LCD used in the good practice example to display the incoming coordinates. The sketch now calculates the distance and bearing from a fixed receiver position (47.963230°N, 16.196234°E at 300 m) to the received location and shows these values on screen.
 
