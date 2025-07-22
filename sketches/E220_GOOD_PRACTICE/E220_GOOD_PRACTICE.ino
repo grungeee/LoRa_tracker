@@ -40,16 +40,23 @@ void setup() {
 // <================================<< LOOP >>=================================>
 void loop() {
   // |=============< E220 Communication >==============|
-receiveE220Message();
-  ResponseContainer rc = e220ttl.receiveMessage();
+  // === RX ===
+
+//receiveE220Message();
+//ResponseContainer rc = e220ttl.receiveMessage();
+
+gpsDataRX();
+LEDcycle(pink);
+
+  // === TX ===
 sendE220Message(comChan, "Can you hear me?");
 //sendE220Message(comChan, "Please, send me a message!");
   LEDR_COLOR(1, dim_blue, 100);
-  if (rc.status.code != 1)
+  if (rsc.status.code != 1)
   {
   LEDR_COLOR(15, dim_red, 100);
   }else{
-  Serial.println(rc.data);
+  Serial.println(rsc.data);
   LEDR_COLOR(15, dim_green, 100);
   }
 
@@ -94,7 +101,7 @@ sendE220Message(comChan, "Can you hear me?");
     }
 
   // |=============< E220 Communication >==============|
-receiveE220Message();
+//receiveE220Message();
 
   /// end loop ///
 }
