@@ -23,6 +23,10 @@ bool updateGPS() {
   return false;
 }
 
+bool isGPSAvailable() {
+  return gps.charsProcessed() > 0;
+}
+
 String getGPSData() {
   if (gps.location.isValid()) {
     return "Latitude: " + String(gps.location.lat(), 6) + "\n" +
