@@ -2,7 +2,11 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 
-#include "LED_Ring.h" // (from a custom file)
+#include "LED_Ring.h" // custom LED ring helper
+
+// The BNO055 is an IMU that fuses gyro, accelerometer and magnetometer
+// data internally. We'll use its fused compass heading to control the
+// LED ring so the lit LED always points in the same physical direction.
 
 // Create an instance of the sensor
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x29); //
@@ -10,135 +14,64 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x29); //
 
 
 //////////////
-int calc_led_index(float gyX) {
-  //reverse
-    //gyX = 360 + gyX * -1;
-    int leds_count = 12;
-    float segment_size = 360.0 / leds_count;  // 30 degrees per segment
-    float segment_shift = segment_size / 2.0;
+const float HEADING_OFFSET = 0.0; // add or subtract degrees so LED 0 points north
 
-    float LEDindex = gyX / segment_size;
-    Serial.println(LEDindex);
-    float mod_estLEDindex = fmod(gyX, segment_size);  // gyX % segment_size
-    Serial.print("mod ");
-    Serial.println(mod_estLEDindex);
+int calc_led_index(float angle) {
+  int leds_count = LEDS_NUM;               // how many LEDs are on the ring
+  float segment = 360.0f / leds_count;     // degrees covered by one LED
 
-    if (LEDindex > 1) {
-        LEDindex = floor(LEDindex);
-        if (mod_estLEDindex > segment_shift) {
-            LEDindex += 1 + FIRST_LED;
-        }
-    } else {
-        if (mod_estLEDindex > segment_shift) {
-            LEDindex = 1;
-        } else {
-            LEDindex = 0;
-        }
-    }
+  // Shift the angle so LED 0 lines up with north.
+  // Adding half a segment lets us use integer division to
+  // automatically round to the nearest LED position.
+  float shifted = angle + HEADING_OFFSET + segment / 2.0f;
+  int index = ((int)(shifted / segment)) % leds_count; // convert to 0..(LEDS_NUM-1)
 
-    Serial.print("LEDindex: ");
-    Serial.println(LEDindex);
-
-    return (int)LEDindex;
+  // The physical LED wiring starts one position clockwise from
+  // the angle 0°/north. Bumping the index by one compensates for
+  // that so LED 1 lights when facing north.
+  index = (index + 1) % leds_count;
+  return index + FIRST_LED;                // some rings start at LED 1
 }
 //////////////
 
 float heading(){
-  // Get magnetometer data
-  imu::Vector<3> mag = bno.getVector(Adafruit_BNO055::VECTOR_MAGNETOMETER);
+  // Ask the BNO055 for its fused orientation in Euler angles.
+  // We'll use the sensor's Z axis (pitch) instead of the usual yaw
+  // so rotating the device forward/backward changes the LED.
+  imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+  float h = euler.z();  // using pitch as the heading
 
-  // Calculate the heading
-  float heading = atan2(mag.y(), mag.x()) * 180.0 / PI;  // Convert to degrees
-
-  // Normalize to 0 - 360 degrees
-  if (heading < 0) {
-    heading += 360;
+  // The sensor can return negative angles, e.g. -45° for 315°.
+  if (h < 0) {
+    h += 360.0f;  // bring into the 0‑360° range
   }
 
-  // Print heading information
   Serial.print("Heading: ");
-  Serial.println(heading);
+  Serial.println(h);
 
-  // Check if pointing north (with a tolerance of ±5 degrees)
-  /*
-  if (heading >= 355 || heading <= 5) {
-    Serial.println("You are pointing NORTH!");
-  } else {
-    Serial.println("Not pointing north.");
-  }
-  */
-  return heading;
+  return h;
 }
 
 /////////////////
 
 
 void setup() {
+  // Start serial so we can see debug output in the monitor
   Serial.begin(115200);
   if (!bno.begin()) {
     Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
     while (1);
   }
-  bno.setExtCrystalUse(true);
-  LEDR_COLOR(0, red, 200);
-  LEDR_COLOR(0, blue, 200);
-  LEDR_COLOR(0, green, 200);
-  LEDcycle(pink);
+  bno.setExtCrystalUse(true);   // use external crystal for better accuracy
+  initLED();                    // ready the LED ring
+  LEDcycle(pink);               // spin through LEDs on startup
 }
 
 void loop() {
-  sensors_event_t event;
-  bno.getEvent(&event);
-
-  // Display the data
-  Serial.print("Orientation: ");
-  Serial.print("X: "); Serial.print(event.orientation.x); 
-  Serial.print(" Y: "); Serial.print(event.orientation.y); 
-  Serial.print(" Z: "); Serial.println(event.orientation.z);
-
-  imu::Vector<3> gyro = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
-  Serial.print("Gyroscope: ");
-  Serial.print("X: "); Serial.print(gyro.x()); 
-  Serial.print(" Y: "); Serial.print(gyro.y()); 
-  Serial.print(" Z: "); Serial.println(gyro.z());
-
-  imu::Vector<3> accel = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
-  Serial.print("Accelerometer: ");
-  Serial.print("X: "); Serial.print(accel.x()); 
-  Serial.print(" Y: "); Serial.print(accel.y()); 
-  Serial.print(" Z: "); Serial.println(accel.z());
-
-  imu::Vector<3> mag = bno.getVector(Adafruit_BNO055::VECTOR_MAGNETOMETER);
-  Serial.print("Magnetometer: ");
-  Serial.print("X: "); Serial.print(mag.x()); 
-  Serial.print(" Y: "); Serial.print(mag.y()); 
-  Serial.print(" Z: "); Serial.println(mag.z());
-
-  imu::Vector<3> linaccel = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
-  Serial.print("Linear Acceleration: ");
-  Serial.print("X: "); Serial.print(linaccel.x()); 
-  Serial.print(" Y: "); Serial.print(linaccel.y()); 
-  Serial.print(" Z: "); Serial.println(linaccel.z());
-
-  imu::Vector<3> gravity = bno.getVector(Adafruit_BNO055::VECTOR_GRAVITY);
-  Serial.print("Gravity: ");
-  Serial.print("X: "); Serial.print(gravity.x()); 
-  Serial.print(" Y: "); Serial.print(gravity.y()); 
-  Serial.print(" Z: "); Serial.println(gravity.z());
-
-   
-
-  float testGyX = 46.0;  // Example input value
-  //int index = calc_led_index(event.orientation.x);
-  float headingNORTH = heading();
-  int index = calc_led_index(headingNORTH);
-  //index = index + 1; //(calibration)
-  LEDR_COLOR(1, red, 300); //(calibrated)
-  LEDR_COLOR(index, purple, 300);
-  Serial.print("Index: ");
-  Serial.println(index);
-  heading();
-  delay(1000);  // Wait 1 second before recalculating
+  float angle = heading();            // 1) get current heading
+  int index = calc_led_index(angle);  // 2) map it to the LED position
+  LEDR_COLOR(index, purple, 300);     // 3) light that LED in purple
+  delay(1000);  // update about once a second
 }
 
 
