@@ -16,6 +16,7 @@ struct GpsData {
 const float rxLat = 47.963230;
 const float rxLon = 16.196234;
 const float rxAlt = 279.0;
+const float rxSat = 69.0;
 
 bool lcdAvailable = true;
 
@@ -42,14 +43,19 @@ double calculateBearing(double lat1, double lon1, double lat2, double lon2) {
 void setup() {
   Serial.begin(115200);
   initLCD();
+  /*
   uint8_t id = tft.readcommand8(GC9A01A_RDDID);
   if (id == 0 || id == 0xFF) {
     lcdAvailable = false;
   }
-  initLED();
+  */
+
   if (lcdAvailable) {
     bootAnimation();
+  }else {
+    bootAnimation();
   }
+  initLED();
   initE220();
   configE220();
   initGPS();
@@ -88,12 +94,12 @@ void loop() {
     tx.alt = gps.altitude.meters();
     tx.sat = gps.satellites.value();
   } else {
-    tx.lat = 0;
-    tx.lon = 0;
-    tx.alt = 0;
-    tx.sat = 0;
+    tx.lat = rxLat;
+    tx.lon = rxLon;
+    tx.alt = rxAlt;
+    tx.sat = rxSat;
   }
+
   e220ttl.sendBroadcastFixedMessage(comChan, &tx, sizeof(GpsData));
-  delay(1000);
 }
 
