@@ -1,20 +1,63 @@
 # LoRa_tracker
 
 ## Description
+A LoRa-based tracker that transmits GPS data using an ESP32 and E220 radio module. The project includes an LCD and IMU for orientation feedback.
 
-### LoRa_tracker
+## Tasks and Milestones
 
+### Hardware
+- [x] Breadboard prototype with LoRa and GPS modules
+- [x] Verified LoRa communication on Arduino and ESP32
+- [x] LED ring proof of concept
+- [x] Preliminary power setup using USB‑C charging board
+- [ ] Finalize 1.28" LCD user interface and menu navigation
+- [ ] Integrate and calibrate GY-9250 magnetometer for compass heading
+- [ ] Implement power management with charging and voltage regulation
+- [ ] Design and print a durable enclosure for field use
+
+### Software
+- [x] Basic LoRa send/receive sketches
+- [x] GPS data parsing
+- [ ] Improve LoRa error handling and data validation
+- [ ] Display distance and bearing on the LCD
+- [ ] Provide configuration menu and serial debugging output
+
+### Validation
+- [ ] Assemble a complete prototype with all modules
+- [ ] Battery endurance tests
+- [ ] Perform field tests to verify range, accuracy and battery life
+
+### Documentation & Release
+- [x] Document quick setup and example sketches
+- [ ] Document the build process and wiring diagrams
+- [ ] Prepare the release package and source files
+- [ ] Create a printable PDF manual
+
+## Resources
+
+- [ESP32-WROOM-32D datasheet](https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf)
+- [E220-900T30D User Manual](E220-900T30D_UserManual_EN_v1.0.pdf)
+- [NEO-6 GPS module datasheet](https://www.u-blox.com/sites/default/files/products/documents/NEO-6_DataSheet_%28GPS.G6-HW-09005%29.pdf)
+- [MPU-9250 datasheet](https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-9250-Datasheet.pdf)
+- [GC9A01 LCD datasheet](https://cdn-shop.adafruit.com/product-files/5220/GC9A01.pdf)
+- [WS2812 LED ring datasheet](https://cdn-shop.adafruit.com/datasheets/WS2812.pdf)
+
+### ESP32-WROOM-32D Pinout
+
+![ESP32-WROOM-32D pin layout](https://docs.espressif.com/projects/esp-idf/en/latest/_static/esp32-wroom-32d-pin-layout.png)
+
+The ESP32-WROOM-32D module exposes 38 pins. Refer to the datasheet for the full description of each pin.
 
 ### Materials
 
-- Arduino Uno
+- [Arduino Uno](https://docs.arduino.cc/hardware/uno-rev3)
 - Breadboard
 
-- LoRa Module
-- GPS Module (With GPS Antenna)
-- __GY-9250__ (update the list!)
-- 1.28" LCD
-- 16Bit LED-Ring
+- [E220-900T30D LoRa module](E220-900T30D_UserManual_EN_v1.0.pdf)
+- [NEO-6 GPS module](https://www.u-blox.com/sites/default/files/products/documents/NEO-6_DataSheet_%28GPS.G6-HW-09005%29.pdf) (with GPS antenna)
+- [GY-9250 IMU](https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-9250-Datasheet.pdf)
+- [1.28" GC9A01 LCD](https://cdn-shop.adafruit.com/product-files/5220/GC9A01.pdf)
+- [WS2812 16-bit LED ring](https://cdn-shop.adafruit.com/datasheets/WS2812.pdf)
 
 - Power
     - Lipo
@@ -40,15 +83,15 @@
 - [ ] GY-9250
     - got some work done on GY-512
     - need to redo for compass
-    - fuck none of the GYros I got have magnetometer working. WHY T_T
+    - magnetometer still not functional with available units
 
 - [ ] Power
     - used a tiny USB-C charging board (USB/IN,BAT,OUT[5V])
-    - need 18650 with lower current, 40A ain't charging
+    - need 18650 with lower current, 40A cell is not charging
     - StepDown for ESP32!
 
 - [ ] Enclosure
-    - The one I made was a chaos. At least it holds the protoboard with components on it.
+    - The first prototype was messy but it holds the protoboard and components.
 
 
     
@@ -56,5 +99,7 @@
 ## Example GPS LoRa sketches
 
 Two example sketches demonstrate sending GPS data over an E220 LoRa radio. `GPSv3_esp32_LoRa_TX` reads the NEO GPS on an ESP32 and sends latitude, longitude, altitude and satellite count as a binary structure. `GPSv3_esp32_LoRa_RX` receives the structure and prints the values to the serial monitor.
-`E220_GOOD_PRACTICE_RX` extends the receiver by integrating the LED ring and round LCD used in the good practice example to display the incoming coordinates. The sketch now calculates the distance and bearing from a fixed receiver position (47.963230°N, 16.196234°E at 300 m) to the received location and shows these values on screen.
+`E220_GOOD_PRACTICE_RX` extends the receiver by integrating the LED ring and round LCD used in the good practice example to display the incoming coordinates. The sketch now calculates the distance and bearing from a fixed receiver position  to the received location and shows these values on screen.
+
+
 
