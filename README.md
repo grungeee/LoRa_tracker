@@ -101,6 +101,24 @@ The ESP32-WROOM-32D module exposes 38 pins. Refer to the datasheet for the full 
 Two example sketches demonstrate sending GPS data over an E220 LoRa radio. `GPSv3_esp32_LoRa_TX` reads the NEO GPS on an ESP32 and sends latitude, longitude, altitude and satellite count as a binary structure. `GPSv3_esp32_LoRa_RX` receives the structure and prints the values to the serial monitor.
 `E220_GOOD_PRACTICE_RX` extends the receiver by integrating the LED ring and round LCD used in the good practice example to display the incoming coordinates. The sketch now calculates the distance and bearing from a fixed receiver position  to the received location and shows these values on screen.
 
+## Compiling and Flashing the Sketches
+
+The example sketches can be built with either the Arduino IDE or PlatformIO. The repository already contains the necessary library sources under the `libraries` folder, but you can also install them through the Arduino Library Manager. To compile the sketches:
+
+1. **Install board definitions**
+   - ESP32 boards by Espressif (`esp32` package) for the ESP32 based examples.
+   - Arduino AVR Boards for the classic Arduino Uno sketches.
+2. **Install required libraries**
+   - **EByte LoRa E220 library** (LoRa_E220)
+   - **TinyGPSPlus** for parsing GPS messages
+   - **Adafruit GC9A01A** display driver (requires *Adafruit GFX* and *Adafruit BusIO*)
+   - **Adafruit NeoPixel** for the LED ring
+3. Open the desired sketch from the `sketches` directory (for example `GPSv3_esp32_LoRa_TX` or `E220_GOOD_PRACTICE_RX`).
+4. Select the correct board and port, then compile and upload.
+
+Using PlatformIO, create a new project for the appropriate board and copy the sketch contents into `src/main.cpp`, ensuring the libraries listed above are added to `platformio.ini`.
+
+
 ## Sensor and Module Pinout
 
 | Component | Example ESP32 Pins |
