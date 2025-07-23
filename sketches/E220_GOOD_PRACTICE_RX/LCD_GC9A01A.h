@@ -15,10 +15,9 @@ extern Adafruit_GC9A01A tft;
 
 void initLCD();
 void clearLCD();
-
 void displayGPSData(float latitude, float longitude, float altitude, int satellites, float distance, float bearing);
-
 void displayNoGPSData();
 void displayText();
+void bootAnimation();
 
 #endif 
