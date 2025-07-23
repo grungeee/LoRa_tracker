@@ -52,8 +52,6 @@ void setup() {
 
   if (lcdAvailable) {
     bootAnimation();
-  }else {
-    bootAnimation();
   }
   initLED();
   initE220();
