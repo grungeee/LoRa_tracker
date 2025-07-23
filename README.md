@@ -57,3 +57,14 @@
 
 Two example sketches demonstrate sending GPS data over an E220 LoRa radio. `GPSv3_esp32_LoRa_TX` reads the NEO GPS on an ESP32 and sends latitude, longitude, altitude and satellite count as a binary structure. `GPSv3_esp32_LoRa_RX` receives the structure and prints the values to the serial monitor.
 
+
+## License
+
+This project is distributed under the [MIT License](LICENSE).
+
+### Third-party libraries
+
+The `libraries/` directory contains third-party dependencies that keep their own
+licenses. For example, RadioLib is licensed under the MIT License—see
+[`libraries/RadioLib/license.txt`](libraries/RadioLib/license.txt).
+Refer to each library's license file for details.
