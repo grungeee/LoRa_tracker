@@ -9,9 +9,14 @@
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x29);
 
 // GC9A01A display pins
-#define TFT_CS 5
-#define TFT_RST 19
-#define TFT_DC 13
+
+#define TFT_CS    5   // Chip select control pin
+#define TFT_RST   19
+#define TFT_DC    13 // because it is being used by E220
+// 
+#define TFT_SDA   23  // SPI Data (MOSI)
+#define TFT_SCL   18  // SPI Clock (SCK)
+
 
 Adafruit_GC9A01A tft(TFT_CS, TFT_DC, TFT_RST);
 
@@ -109,5 +114,5 @@ void loop() {
 
   tft.fillScreen(GC9A01A_BLACK);
   drawCube(heading, roll, pitch);
-  delay(40);
+//  delay(40);
 }
