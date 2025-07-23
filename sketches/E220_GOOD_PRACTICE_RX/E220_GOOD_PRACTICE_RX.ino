@@ -40,6 +40,7 @@ void setup() {
   Serial.begin(115200);
   initLCD();
   initLED();
+  bootAnimation();
   initE220();
   configE220();
   LEDcycle(yellow); // indicate startup

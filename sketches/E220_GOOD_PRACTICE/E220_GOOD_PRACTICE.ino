@@ -27,8 +27,8 @@ void setup() {
   while (!Serial); // wait for serial port to connect. Needed for native USB
 // ==========<   INIT    >==========|
   initLCD();
-  bootAnimation();
   initLED();
+  bootAnimation();
   initE220();
   configE220();
   initGPS();
