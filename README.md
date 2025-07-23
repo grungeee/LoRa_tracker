@@ -7,14 +7,15 @@
 
 ### Materials
 
+- ESP32
 - Arduino Uno
 - Breadboard
-
-- LoRa Module
+- LoRa Module E220 (With ... Antenna)
 - GPS Module (With GPS Antenna)
-- __GY-9250__ (update the list!)
 - 1.28" LCD
 - 16Bit LED-Ring
+- GY-BNO055
+- __GY-9250__ (update the list!)
 
 - Power
     - Lipo
@@ -41,6 +42,9 @@
     - got some work done on GY-512
     - need to redo for compass
     - fuck none of the GYros I got have magnetometer working. WHY T_T
+    -> switched to BNO055
+
+
 
 - [ ] Power
     - used a tiny USB-C charging board (USB/IN,BAT,OUT[5V])
@@ -58,3 +62,14 @@
 Two example sketches demonstrate sending GPS data over an E220 LoRa radio. `GPSv3_esp32_LoRa_TX` reads the NEO GPS on an ESP32 and sends latitude, longitude, altitude and satellite count as a binary structure. `GPSv3_esp32_LoRa_RX` receives the structure and prints the values to the serial monitor.
 `E220_GOOD_PRACTICE_RX` extends the receiver by integrating the LED ring and round LCD used in the good practice example to display the incoming coordinates. The sketch now calculates the distance and bearing from a fixed receiver position (47.963230°N, 16.196234°E at 300 m) to the received location and shows these values on screen.
 
+
+## License
+
+This project is distributed under the [MIT License](LICENSE).
+
+### Third-party libraries
+
+The `libraries/` directory contains third-party dependencies that keep their own
+licenses. For example, RadioLib is licensed under the MIT License—see
+[`libraries/RadioLib/license.txt`](libraries/RadioLib/license.txt).
+Refer to each library's license file for details.
