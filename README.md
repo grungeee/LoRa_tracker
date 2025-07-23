@@ -7,14 +7,15 @@
 
 ### Materials
 
+- ESP32
 - Arduino Uno
 - Breadboard
-
-- LoRa Module
+- LoRa Module E220 (With ... Antenna)
 - GPS Module (With GPS Antenna)
-- __GY-9250__ (update the list!)
 - 1.28" LCD
 - 16Bit LED-Ring
+- GY-BNO055
+- __GY-9250__ (update the list!)
 
 - Power
     - Lipo
@@ -41,6 +42,9 @@
     - got some work done on GY-512
     - need to redo for compass
     - fuck none of the GYros I got have magnetometer working. WHY T_T
+    -> switched to BNO055
+
+
 
 - [ ] Power
     - used a tiny USB-C charging board (USB/IN,BAT,OUT[5V])
