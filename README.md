@@ -101,5 +101,16 @@ The ESP32-WROOM-32D module exposes 38 pins. Refer to the datasheet for the full 
 Two example sketches demonstrate sending GPS data over an E220 LoRa radio. `GPSv3_esp32_LoRa_TX` reads the NEO GPS on an ESP32 and sends latitude, longitude, altitude and satellite count as a binary structure. `GPSv3_esp32_LoRa_RX` receives the structure and prints the values to the serial monitor.
 `E220_GOOD_PRACTICE_RX` extends the receiver by integrating the LED ring and round LCD used in the good practice example to display the incoming coordinates. The sketch now calculates the distance and bearing from a fixed receiver position  to the received location and shows these values on screen.
 
+## Sensor and Module Pinout
+
+| Component | Example ESP32 Pins |
+|-----------|-------------------|
+| **E220 LoRa module** | `TX_PIN 17`, `RX_PIN 16`, `AUX_PIN 4`, `M0_PIN 2`, `M1_PIN 15` |
+| **NEO-6 GPS module** | `RXPinGPS 33` (GPS→ESP32), `TXPinGPS 32` (ESP32→GPS) |
+| **GC9A01A LCD** | `TFT_CS 5`, `TFT_RST 19`, `TFT_DC 4`, `TFT_SDA 23`, `TFT_SCL 18` |
+| **WS2812 LED ring** | `LED_RING_PIN 21` |
+| **MPU9250 IMU** | `SDA_PIN 21`, `SCL_PIN 22` |
+| **BNO055 IMU** | Default I²C pins `SDA 21` and `SCL 22` |
+
 
 
