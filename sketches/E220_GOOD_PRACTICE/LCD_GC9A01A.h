@@ -18,5 +18,6 @@ void clearLCD();
 void displayGPSData(float latitude, float longitude, float altitude, int satellites);
 void displayNoGPSData();
 void displayText();
+void bootAnimation();
 
 #endif 

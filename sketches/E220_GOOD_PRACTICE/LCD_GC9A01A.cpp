@@ -70,6 +70,32 @@ void displayText() {
   tft.print(text);
 }
 
+void bootAnimation() {
+  clearLCD();
+
+  int16_t x1, y1;
+  uint16_t w, h;
+
+  String text = "Booting";
+  tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
+  tft.setCursor((240 - w) / 2, 100);
+  tft.print(text);
+
+  int barWidth = 160;
+  int barHeight = 10;
+  int startX = (240 - barWidth) / 2;
+  int startY = 130;
+
+  for (int i = 0; i <= barWidth; i += 8) {
+    tft.drawRect(startX, startY, barWidth, barHeight, GC9A01A_WHITE);
+    tft.fillRect(startX + 1, startY + 1, i, barHeight - 2, GC9A01A_BLUE);
+    delay(40);
+  }
+
+  delay(300);
+  clearLCD();
+}
+
 
 /*
   // Print the second variable
