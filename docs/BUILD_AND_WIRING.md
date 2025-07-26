@@ -1,4 +1,4 @@
-# Build Process and Wiring
+#Build Process and Wiring
 
 This document describes how to assemble the LoRa tracker prototype and connect all modules to the ESP32.
 
@@ -32,46 +32,36 @@ The following Mermaid diagram shows the logical wiring. Pin numbers correspond t
 
 ```mermaid
 flowchart TB
+    subgraph Power
+        Vbatt[(LiPo Battery)] --> Charger[USB-C Charger]
+        Charger --> StepDown
+        Charger --> StepUp
+        StepUp --> V5[5V Rail]
+        StepDown --> V3[3.3V Rail]
+    end
 
-    %% === POWER SECTION ===
-    USB[🧲 USB Input (5V)] --> TP4056[🔌 TP4056 Charger Module]
-    TP4056 -->|B+ / B-| LiPo[🔋 LiPo Battery (3.7V)]
-    LiPo --> Boost[⚡ Step-Up Converter (to 5V)]
-    Boost --> V5[🔋 5V Rail]
+    ESP32[ESP32-WROOM-32D] -->|TX 17| E220[E220-900T30D LoRa]
+    ESP32 -->|RX 16| E220
+    ESP32 -->|M0 2| E220
+    ESP32 -->|M1 15| E220
+    ESP32 -->|AUX 4| E220
+    ESP32 -->|RX 33| GPS[NEO-6 GPS]
+    ESP32 -->|TX 32| GPS
+    ESP32 -->|21| LEDring[WS2812 LED Ring]
+    ESP32 -->|SDA 21| IMU[GY-9250 IMU]
+    ESP32 -->|SCL 22| IMU
+    ESP32 -->|23| LCD[1.28" GC9A01 LCD]
+    ESP32 -->|18| LCD
+    ESP32 -->|5| LCD
+    ESP32 -->|4| LCD
+    ESP32 -->|19| LCD
 
-    %% === POWER DISTRIBUTION ===
-    V5 -->|VIN Pin| ESP32[🧠 ESP32 Dev Board]
-    ESP32 -->|3.3V Regulator| V3[🔌 3.3V Devices Rail]
-
-    %% === DEVICES USING 3.3V ===
-    V3 --> E220[📡 E220 LoRa Module]
-    V3 --> GPS[📍 GPS Module]
-    V3 --> IMU[🧭 9-Axis IMU Sensor]
-
-    %% === DEVICES USING 5V ===
-    V5 --> LEDring[💡 LED Ring (Neopixels?)]
-    V5 --> LCD[🖥️ LCD Display]
-
-    %% === SIGNAL CONNECTIONS ===
-    ESP32 -->|TX (17)| E220
-    ESP32 -->|RX (16)| E220
-    ESP32 -->|M0 (2)| E220
-    ESP32 -->|M1 (15)| E220
-    ESP32 -->|AUX (4)| E220
-
-    ESP32 -->|RX (33)| GPS
-    ESP32 -->|TX (32)| GPS
-
-    ESP32 -->|SDA (21)| IMU
-    ESP32 -->|SCL (22)| IMU
-
-    ESP32 -->|GPIOs| LEDring
-    ESP32 -->|GPIO 23| LCD
-    ESP32 -->|GPIO 18| LCD
-    ESP32 -->|GPIO 5| LCD
-    ESP32 -->|GPIO 4| LCD
-    ESP32 -->|GPIO 19| LCD
+    V5 --> GPS
+    V5 --> LEDring
+    V5 --> LCD
+    V3 --> ESP32
+    V3 --> E220
+    V3 --> IMU
 ```
 
 This diagram is intended as a reference; you can adapt the exact pin numbers as needed. Ensure that all 5 V peripherals share the common ground and that the ESP32 is supplied with 3.3 V from the step‑down regulator.
-
