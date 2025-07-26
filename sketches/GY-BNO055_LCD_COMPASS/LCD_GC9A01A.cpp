@@ -18,6 +18,7 @@ void displayCompass(float heading, float startHeading) {
   clearLCD();
   int16_t x1, y1;
   uint16_t w, h;
+  tft.setTextSize(2);
 
   int cx = 120;
   int cy = 120;
@@ -32,8 +33,12 @@ void displayCompass(float heading, float startHeading) {
 
   for (auto &l : labels) {
     float a = (l.angle - heading) * 0.01745329251;
-    int tx = cx + (int)((radius + 12) * sin(a)) - 4;
-    int ty = cy - (int)((radius + 12) * cos(a)) + 4;
+    //int tx = cx + (int)((radius + 12 * 1/2) * sin(a)) - 4 * 1/2;
+    //int ty = cy - (int)((radius + 12 * 1/2) * cos(a)) + 4 * 1/2;
+
+    int tx = cx + (int)((radius) * sin(a));
+    int ty = cy - (int)((radius) * cos(a));
+
     tft.setCursor(tx, ty);
     tft.print(l.label);
   }
@@ -45,6 +50,7 @@ void displayCompass(float heading, float startHeading) {
   int y2 = cy - (int)(len * cos(arrowAngle));
   tft.drawLine(cx, cy, x2, y2, GC9A01A_RED);
 
+  tft.setTextSize(1);
   String text = String(heading, 1) + " deg";
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
   tft.setCursor((240 - w) / 2, cy + radius + 20);
