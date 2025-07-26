@@ -11,7 +11,7 @@ float startHeading = 0.0f;
 
 float readHeading() {
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-  float h = -euler.x();
+  float h = euler.x();
   if (h < 0) {
     h += 360.0f;
   }
@@ -20,6 +20,25 @@ float readHeading() {
   return h;
 }
 
+float initReadHeading() {
+  imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+  float x = euler.x();
+  float y = euler.y();
+  float z = euler.z();
+  Serial.println("--------------");
+  Serial.print("Init Heading ");
+  Serial.print("x: ");
+  Serial.println(x);
+  Serial.print("y: ");
+  Serial.println(y);
+  Serial.print("z: ");
+  Serial.println(z);
+  Serial.print("--------------");
+  return x;
+
+}
+
+
 void setup() {
   Serial.begin(115200);
   if (!bno.begin()) {
@@ -27,13 +46,23 @@ void setup() {
     while (1);
   }
   bno.setExtCrystalUse(true);
+
+  uint8_t system, gyro, accel, mag;
+  bno.getcalibration(&system, &gyro, &accel, &mag);
+  Serial.print("magnetometer cal: ");
+  Serial.println(mag); // 0-3, where 3 = fully calibrated
+
+  initReadHeading();
+  startHeading = readHeading();
+
   initLCD();
   delay(100); // allow sensor to stabilize
-  startHeading = readHeading();
+
 }
 
 void loop() {
+
   float h = readHeading();
-  displayCompass(h, startHeading);
+  displayCompassArrow(h, startHeading);
   delay(1000);
 }
