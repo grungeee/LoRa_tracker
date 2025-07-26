@@ -15,7 +15,7 @@ extern Adafruit_GC9A01A tft;
 
 void initLCD();
 void clearLCD();
-void displayHeading(float heading);
+void displayCompass(float heading, float startHeading);
 
 
 #endif 

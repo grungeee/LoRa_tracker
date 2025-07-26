@@ -14,30 +14,35 @@ void clearLCD() {
   tft.fillScreen(GC9A01A_BLACK);
 }
 
-void displayHeading(float heading) {
+void displayCompass(float heading, float startHeading) {
   clearLCD();
   int16_t x1, y1;
   uint16_t w, h;
 
-  // Draw compass circle and labels
   int cx = 120;
   int cy = 120;
   int radius = 80;
   tft.drawCircle(cx, cy, radius, GC9A01A_WHITE);
-  tft.setCursor(cx-5, cy-radius-20);
-  tft.print("N");
-  tft.setCursor(cx+radius+5-6, cy-3);
-  tft.print("E");
-  tft.setCursor(cx-3, cy+radius+5);
-  tft.print("S");
-  tft.setCursor(cx-radius-20, cy-3);
-  tft.print("W");
 
-  // Draw heading arrow
-  float angle = heading * 0.01745329251; // DEG_TO_RAD
+  // rotate the compass labels so north stays at the top
+  float hRad = heading * 0.01745329251; // DEG_TO_RAD
+  struct { const char *label; float angle; } labels[4] = {
+    {"N", 0}, {"E", 90}, {"S", 180}, {"W", 270}
+  };
+
+  for (auto &l : labels) {
+    float a = (l.angle - heading) * 0.01745329251;
+    int tx = cx + (int)((radius + 12) * sin(a)) - 4;
+    int ty = cy - (int)((radius + 12) * cos(a)) + 4;
+    tft.setCursor(tx, ty);
+    tft.print(l.label);
+  }
+
+  // Arrow to the starting heading
+  float arrowAngle = (startHeading - heading) * 0.01745329251;
   int len = radius - 10;
-  int x2 = cx + (int)(len * sin(angle));
-  int y2 = cy - (int)(len * cos(angle));
+  int x2 = cx + (int)(len * sin(arrowAngle));
+  int y2 = cy - (int)(len * cos(arrowAngle));
   tft.drawLine(cx, cy, x2, y2, GC9A01A_RED);
 
   String text = String(heading, 1) + " deg";

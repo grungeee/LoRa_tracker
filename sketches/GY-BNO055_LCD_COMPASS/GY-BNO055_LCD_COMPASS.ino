@@ -7,6 +7,8 @@
 // We'll display the resulting compass heading on the LCD for debugging.
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x29);
 
+float startHeading = 0.0f;
+
 float readHeading() {
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
   float h = -euler.x();
@@ -26,10 +28,12 @@ void setup() {
   }
   bno.setExtCrystalUse(true);
   initLCD();
+  delay(100); // allow sensor to stabilize
+  startHeading = readHeading();
 }
 
 void loop() {
   float h = readHeading();
-  displayHeading(h);
+  displayCompass(h, startHeading);
   delay(1000);
 }
