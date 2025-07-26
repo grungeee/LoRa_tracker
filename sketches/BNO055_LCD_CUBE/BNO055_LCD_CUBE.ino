@@ -78,6 +78,8 @@ void setup() {
   bno.setExtCrystalUse(true);
   initLCD();
   displayText("booting...");
+  delay(1000);
+}
 
 
 // Apply yaw (h), roll (r) and pitch (p) rotations to vector v
