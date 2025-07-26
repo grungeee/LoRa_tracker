@@ -20,29 +20,6 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x29);
 
 Adafruit_GC9A01A tft(TFT_CS, TFT_DC, TFT_RST);
 
-// -------------------------
-void initLCD() {
-  tft.begin();
-  tft.setRotation(2); // Flip the display the right way  (90 degrees / point)
-  // Fill screen with black color
-  tft.fillScreen(GC9A01A_BLACK);
-  // Set text size
-  tft.setTextSize(2);
-  // Set text color
-  tft.setTextColor(GC9A01A_WHITE);
-}
-
-
-void displayText(String string) {
-  tft.fillScreen(GC9A01A_BLACK); // lets clear the screen before we print the text
-  int16_t x1, y1;
-  uint16_t w, h;
-  tft.getTextBounds(string, 0, 0, &x1, &y1, &w, &h);
-  tft.setCursor((240 - w) / 2, 120 - h / 2);
-  tft.print(string);
-  }
-// -------------------------
-
 // Cube vertex structure
 struct Vec3 {
   float x;
@@ -76,9 +53,11 @@ void setup() {
     while(1);
   }
   bno.setExtCrystalUse(true);
-  initLCD();
-  displayText("booting...");
 
+  tft.begin();
+  tft.setRotation(3);
+  tft.fillScreen(GC9A01A_BLACK);
+}
 
 // Apply yaw (h), roll (r) and pitch (p) rotations to vector v
 Vec3 rotate(Vec3 v, float h, float r, float p) {
