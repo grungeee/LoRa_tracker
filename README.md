@@ -28,7 +28,7 @@ A LoRa-based tracker that transmits GPS data using an ESP32 and E220 radio modul
 
 ### Documentation & Release
 - [x] Document quick setup and example sketches
-- [ ] Document the build process and wiring diagrams
+- [x] Document the build process and wiring diagrams
 - [ ] Prepare the release package and source files
 - [ ] Create a printable PDF manual
 
@@ -129,5 +129,10 @@ Using PlatformIO, create a new project for the appropriate board and copy the sk
 | **MPU9250 IMU** | `SDA_PIN 21`, `SCL_PIN 22` |
 | **BNO055 IMU** | Default I²C pins `SDA 21` and `SCL 22` |
 
+
+## Build Documentation
+
+Step-by-step build instructions and a wiring diagram are available in
+[docs/BUILD_AND_WIRING.md](docs/BUILD_AND_WIRING.md).
 
 
