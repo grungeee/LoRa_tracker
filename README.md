@@ -1,5 +1,4 @@
 # LoRa_tracker
-
 ## Description
 A LoRa-based tracker that transmits GPS data using an ESP32 and E220 radio module. The project includes an LCD and IMU for orientation feedback.
 

@@ -53,6 +53,13 @@ void setup() {
     while(1);
   }
   bno.setExtCrystalUse(true);
+<<<<<<< HEAD
+=======
+  initLCD();
+  displayText("booting...");
+  delay(1000);
+}
+>>>>>>> 7474c7485063cad9a612a7cfce011d1568625878
 
   tft.begin();
   tft.setRotation(3);
