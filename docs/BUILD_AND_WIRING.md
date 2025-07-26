@@ -33,7 +33,7 @@ The following Mermaid diagram shows the logical wiring. Pin numbers correspond t
 ```mermaid
 flowchart TB
     subgraph Power
-        Vbatt[(LiPo Battery)] --> Charger[USB-C Charger]
+        Vbatt[LiPo Battery) --> Charger[USB-C Charger]
         Charger --> StepDown
         Charger --> StepUp
         StepUp --> V5[5V Rail]
