@@ -135,6 +135,14 @@ void loop() {
   float roll = euler.y() * DEG_TO_RAD;
   float pitch = euler.z() * DEG_TO_RAD;
 
+  // Output raw Euler angles to the serial monitor
+  Serial.print("X: ");
+  Serial.print(euler.x());
+  Serial.print("\tY: ");
+  Serial.print(euler.y());
+  Serial.print("\tZ: ");
+  Serial.println(euler.z());
+
   tft.fillScreen(GC9A01A_BLACK);
   drawCube(heading, roll, pitch);
 //  delay(40);
