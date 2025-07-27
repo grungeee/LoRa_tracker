@@ -11,7 +11,7 @@ float startHeading = 0.0f;
 
 float readHeading() {
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-  float h = -euler.x();
+  float h = euler.x();
   if (h < 0) {
     h += 360.0f;
   }
@@ -35,5 +35,5 @@ void setup() {
 void loop() {
   float h = readHeading();
   displayCompass(h, startHeading);
-  delay(1000);
+  delay(200);
 }
