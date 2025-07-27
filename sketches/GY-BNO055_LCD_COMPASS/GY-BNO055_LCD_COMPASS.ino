@@ -36,4 +36,6 @@ void loop() {
   float h = readHeading();
   displayCompass(h, startHeading);
   delay(1000);
+  displayHeading(h);
+  delay(40);
 }

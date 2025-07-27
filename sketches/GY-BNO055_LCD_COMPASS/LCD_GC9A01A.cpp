@@ -16,13 +16,20 @@ void clearLCD() {
 
 void displayCompass(float heading, float startHeading) {
   clearLCD();
+
   int16_t x1, y1;
   uint16_t w, h;
 
+<<<<<<< Updated upstream
+=======
+  // Draw compass circle and labels
+  tft.setTextSize(2);
+>>>>>>> Stashed changes
   int cx = 120;
   int cy = 120;
   int radius = 80;
   tft.drawCircle(cx, cy, radius, GC9A01A_WHITE);
+<<<<<<< Updated upstream
 
   // rotate the compass labels so north stays at the top
   struct { const char *label; float angle; } labels[4] = {
@@ -38,6 +45,20 @@ void displayCompass(float heading, float startHeading) {
   }
 
   // Arrow indicating magnetic north
+=======
+  tft.setCursor(cx-5, cy-radius-20);
+  tft.print("N");
+  tft.setCursor(cx+radius+10, cy-3);
+  tft.print("E");
+  tft.setCursor(cx-3, cy+radius+5);
+  tft.print("S");
+  tft.setCursor(cx-radius-20, cy-3);
+  tft.print("W");
+
+  // Draw heading arrow
+  tft.setTextSize(1);
+  float angle = heading * 0.01745329251; // DEG_TO_RAD
+>>>>>>> Stashed changes
   int len = radius - 10;
   int nx = cx;
   int ny = cy - len;
