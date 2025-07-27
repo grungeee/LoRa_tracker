@@ -7,7 +7,7 @@ This document describes how to assemble the LoRa tracker prototype and connect a
 - ESP32-WROOM-32D development board
 - E220-900T30D LoRa transceiver
 - NEO-6 GPS module
-- GY-9250 IMU
+- BNO055 IMU
 - 1.28" GC9A01 round LCD
 - WS2812 16-bit LED ring
 - LiPo battery with USB‑C charger board
@@ -22,7 +22,7 @@ This document describes how to assemble the LoRa tracker prototype and connect a
 4. **Wire the GPS module** – Connect GPS TX to ESP32 pin 33 and GPS RX to ESP32 pin 32. Provide 5 V and GND from the power rail.
 5. **Wire the LCD** – Use the SPI pins from the ESP32 (`SDA` 23 and `SCL` 18) along with the chip‑select pins (`CS` 5, `DC` 4, `RST` 19) as listed in the pinout table.
 6. **Wire the LED ring** – Connect the data input of the LED ring to ESP32 pin 21 and power it from the 5 V rail.
-7. **Wire the IMU** – Connect the `SDA` and `SCL` lines of the GY‑9250 to ESP32 pins 21 and 22. The sensor uses the standard I²C voltage of 3.3 V.
+7. **Wire the IMU** – Connect the `SDA` and `SCL` lines of the BNO055 to ESP32 pins 21 and 22. The sensor uses the standard I²C voltage of 3.3 V.
 8. **Power distribution** – Use the USB‑C charger board to supply the LiPo battery and step-down regulator for the ESP32. The step-up regulator can provide a stable 5 V rail for the peripherals.
 9. **Double-check connections** – Verify the wiring matches the schematic before powering the board. Incorrect wiring can damage the modules.
 
@@ -48,7 +48,7 @@ flowchart TB
     ESP32 -->|RX 33| GPS[NEO-6 GPS]
     ESP32 -->|TX 32| GPS
     ESP32 -->|21| LEDring[WS2812 LED Ring]
-    ESP32 -->|SDA 21| IMU[GY-9250 IMU]
+    ESP32 -->|SDA 21| IMU[BNO055 IMU]
     ESP32 -->|SCL 22| IMU
     ESP32 -->|23| LCD[1.28" GC9A01 LCD]
     ESP32 -->|18| LCD
