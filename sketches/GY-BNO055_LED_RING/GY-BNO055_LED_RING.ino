@@ -42,7 +42,7 @@ float heading(){
   // effectively gives us the compass heading in degrees.
   // advance clockwise when the device rotates clockwise.
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-  float h = -euler.x();  // 0° = north, 90° = east
+  float h = uler.x();  // 0° = north, 90° = east
 
   // The sensor can return negative angles, e.g. -45° for 315°.
   if (h < 0) {

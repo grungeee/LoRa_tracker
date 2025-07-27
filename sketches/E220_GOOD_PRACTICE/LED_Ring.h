@@ -4,7 +4,7 @@
 #include <Adafruit_NeoPixel.h>
 
 // Pin and LED configuration
-#define LED_RING_PIN 21
+#define LED_RING_PIN 25
 #define LEDS_NUM 16
 
 extern Adafruit_NeoPixel pixels;
