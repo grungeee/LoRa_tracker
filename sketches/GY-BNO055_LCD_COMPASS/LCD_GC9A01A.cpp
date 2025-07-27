@@ -25,7 +25,6 @@ void displayCompass(float heading, float startHeading) {
   tft.drawCircle(cx, cy, radius, GC9A01A_WHITE);
 
   // rotate the compass labels so north stays at the top
-  float hRad = heading * 0.01745329251; // DEG_TO_RAD
   struct { const char *label; float angle; } labels[4] = {
     {"N", 0}, {"E", 90}, {"S", 180}, {"W", 270}
   };
@@ -38,12 +37,30 @@ void displayCompass(float heading, float startHeading) {
     tft.print(l.label);
   }
 
-  // Arrow to the starting heading
-  float arrowAngle = (startHeading - heading) * 0.01745329251;
+  // Arrow indicating magnetic north
   int len = radius - 10;
-  int x2 = cx + (int)(len * sin(arrowAngle));
-  int y2 = cy - (int)(len * cos(arrowAngle));
-  tft.drawLine(cx, cy, x2, y2, GC9A01A_RED);
+  int nx = cx;
+  int ny = cy - len;
+  uint16_t northColor = GC9A01A_YELLOW;
+
+  // Arrow that starts at boot and rotates with the device
+  float arrowAngle = (startHeading - heading) * 0.01745329251;
+  int ax = cx + (int)(len * sin(arrowAngle));
+  int ay = cy - (int)(len * cos(arrowAngle));
+
+  float diff = fabs(startHeading - heading);
+  if (diff > 180.0f) {
+    diff = 360.0f - diff;
+  }
+
+  uint16_t needleColor = GC9A01A_RED;
+  if (diff < 5.0f) {
+    northColor = GC9A01A_GREEN;
+    needleColor = GC9A01A_GREEN;
+  }
+
+  tft.drawLine(cx, cy, nx, ny, northColor);
+  tft.drawLine(cx, cy, ax, ay, needleColor);
 
   String text = String(heading, 1) + " deg";
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
