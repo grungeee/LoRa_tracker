@@ -1,6 +1,6 @@
 # LoRa_tracker
 ## Description
-A LoRa-based tracker that transmits GPS data using an ESP32 and E220 radio module. The project includes an LCD and IMU for orientation feedback.
+A LoRa-based tracker that transmits GPS data using an ESP32 and E220 radio module. The project includes an LCD and BNO055 IMU for orientation feedback.
 
 ## Tasks and Milestones
 
@@ -10,7 +10,7 @@ A LoRa-based tracker that transmits GPS data using an ESP32 and E220 radio modul
 - [x] LED ring proof of concept
 - [x] Preliminary power setup using USB‑C charging board
 - [ ] Finalize 1.28" LCD user interface and menu navigation
-- [ ] Integrate and calibrate GY-9250 magnetometer for compass heading
+- [ ] Integrate and calibrate BNO055 IMU for compass heading
 - [ ] Implement power management with charging and voltage regulation
 - [ ] Design and print a durable enclosure for field use
 
@@ -37,7 +37,7 @@ A LoRa-based tracker that transmits GPS data using an ESP32 and E220 radio modul
 - [ESP32-WROOM-32D datasheet](https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf)
 - [E220-900T30D User Manual](E220-900T30D_UserManual_EN_v1.0.pdf)
 - [NEO-6 GPS module datasheet](https://www.u-blox.com/sites/default/files/products/documents/NEO-6_DataSheet_%28GPS.G6-HW-09005%29.pdf)
-- [MPU-9250 datasheet](https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-9250-Datasheet.pdf)
+- [BNO055 datasheet](https://cdn-shop.adafruit.com/datasheets/BST_BNO055_DS000_14.pdf)
 - [GC9A01 LCD datasheet](https://cdn-shop.adafruit.com/product-files/5220/GC9A01.pdf)
 - [WS2812 LED ring datasheet](https://cdn-shop.adafruit.com/datasheets/WS2812.pdf)
 
@@ -54,7 +54,7 @@ The ESP32-WROOM-32D module exposes 38 pins. Refer to the datasheet for the full 
 
 - [E220-900T30D LoRa module](E220-900T30D_UserManual_EN_v1.0.pdf)
 - [NEO-6 GPS module](https://www.u-blox.com/sites/default/files/products/documents/NEO-6_DataSheet_%28GPS.G6-HW-09005%29.pdf) (with GPS antenna)
-- [GY-9250 IMU](https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-9250-Datasheet.pdf)
+- [BNO055 IMU](https://cdn-shop.adafruit.com/datasheets/BST_BNO055_DS000_14.pdf)
 - [1.28" GC9A01 LCD](https://cdn-shop.adafruit.com/product-files/5220/GC9A01.pdf)
 - [WS2812 16-bit LED ring](https://cdn-shop.adafruit.com/datasheets/WS2812.pdf)
 
@@ -74,15 +74,15 @@ The ESP32-WROOM-32D module exposes 38 pins. Refer to the datasheet for the full 
     - worked like a charm both on arduino and esp32
 
 - [x] 16Bit LEd-Ring
-    - it works, the actual code is dependant on the GPS and GY        
+    - it works, the actual code is dependant on the GPS and IMU        
 
 - [ ] 1.28" LCD
     - could use it for troubleshooting atm, actual UX/UI is the last thing that needs to be done
 
-- [ ] GY-9250
-    - got some work done on GY-512
-    - need to redo for compass
-    - magnetometer still not functional with available units
+- [ ] BNO055 IMU
+    - initial tests completed
+    - integrate orientation data for compass
+    - finalize calibration routine
 
 - [ ] Power
     - used a tiny USB-C charging board (USB/IN,BAT,OUT[5V])
@@ -126,7 +126,6 @@ Using PlatformIO, create a new project for the appropriate board and copy the sk
 | **NEO-6 GPS module** | `RXPinGPS 33` (GPS→ESP32), `TXPinGPS 32` (ESP32→GPS) |
 | **GC9A01A LCD** | `TFT_CS 5`, `TFT_RST 19`, `TFT_DC 4`, `TFT_SDA 23`, `TFT_SCL 18` |
 | **WS2812 LED ring** | `LED_RING_PIN 21` |
-| **MPU9250 IMU** | `SDA_PIN 21`, `SCL_PIN 22` |
 | **BNO055 IMU** | Default I²C pins `SDA 21` and `SCL 22` |
 
 
