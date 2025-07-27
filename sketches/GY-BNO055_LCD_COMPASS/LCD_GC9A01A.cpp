@@ -4,7 +4,7 @@ Adafruit_GC9A01A tft = Adafruit_GC9A01A(TFT_CS, TFT_DC, TFT_RST);
 
 void initLCD() {
   tft.begin();
-  tft.setRotation(2);
+  tft.setRotation(3);
   tft.fillScreen(GC9A01A_BLACK);
   tft.setTextSize(2);
   tft.setTextColor(GC9A01A_WHITE);
@@ -17,6 +17,7 @@ void clearLCD() {
 
 
 void displayCompassArrow(float heading, float startHeading) {
+  tft.setTextSize(2);
   clearLCD();
   int16_t x1, y1;
   uint16_t w, h;
@@ -31,6 +32,7 @@ void displayCompassArrow(float heading, float startHeading) {
   int y2 = cy - (int)(len * cos(arrowAngle));
   tft.drawLine(cx, cy, x2, y2, GC9A01A_RED);
 
+  tft.setTextSize(1);
   String text = String(heading, 1) + " deg";
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
   tft.setCursor((240 - w) / 2, cy + radius + 20);

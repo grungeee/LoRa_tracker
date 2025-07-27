@@ -32,11 +32,10 @@ void setup() {
   bno.setExtCrystalUse(true);
 
   uint8_t system, gyro, accel, mag;
-  bno.getcalibration(&system, &gyro, &accel, &mag);
+  bno.getCalibration(&system, &gyro, &accel, &mag);
   Serial.print("magnetometer cal: ");
   Serial.println(mag); // 0-3, where 3 = fully calibrated
 
-  initReadHeading();
   startHeading = readHeading();
 
   initLCD();
@@ -48,5 +47,5 @@ void loop() {
 
   float h = readHeading();
   displayCompassArrow(h, startHeading);
-  delay(1000);
+  delay(300);
 }
