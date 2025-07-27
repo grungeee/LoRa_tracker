@@ -14,7 +14,7 @@ void clearLCD() {
   tft.fillScreen(GC9A01A_BLACK);
 }
 
-void displayCompass(float heading, float startHeading) {
+void displayCompass(float heading, float needleHeading, bool aligned) {
   clearLCD();
   int16_t x1, y1;
   uint16_t w, h;
@@ -38,12 +38,20 @@ void displayCompass(float heading, float startHeading) {
     tft.print(l.label);
   }
 
-  // Arrow to the starting heading
-  float arrowAngle = (startHeading - heading) * 0.01745329251;
+  // Arrow pointing to magnetic north
+  float northAngle = (0 - heading) * 0.01745329251;
   int len = radius - 10;
-  int x2 = cx + (int)(len * sin(arrowAngle));
-  int y2 = cy - (int)(len * cos(arrowAngle));
-  tft.drawLine(cx, cy, x2, y2, GC9A01A_RED);
+  int nx = cx + (int)(len * sin(northAngle));
+  int ny = cy - (int)(len * cos(northAngle));
+  uint16_t northColor = aligned ? GC9A01A_GREEN : GC9A01A_WHITE;
+  tft.drawLine(cx, cy, nx, ny, northColor);
+
+  // Arrow that can be rotated by the user
+  float needleAngle = (needleHeading - heading) * 0.01745329251;
+  int x2 = cx + (int)(len * sin(needleAngle));
+  int y2 = cy - (int)(len * cos(needleAngle));
+  uint16_t needleColor = aligned ? GC9A01A_GREEN : GC9A01A_RED;
+  tft.drawLine(cx, cy, x2, y2, needleColor);
 
   String text = String(heading, 1) + " deg";
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
