@@ -20,23 +20,7 @@ float readHeading() {
   return h;
 }
 
-float initReadHeading() {
-  imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-  float x = euler.x();
-  float y = euler.y();
-  float z = euler.z();
-  Serial.println("--------------");
-  Serial.print("Init Heading ");
-  Serial.print("x: ");
-  Serial.println(x);
-  Serial.print("y: ");
-  Serial.println(y);
-  Serial.print("z: ");
-  Serial.println(z);
-  Serial.print("--------------");
-  return x;
 
-}
 
 
 void setup() {
