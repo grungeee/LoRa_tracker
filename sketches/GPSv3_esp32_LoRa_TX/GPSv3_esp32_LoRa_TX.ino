@@ -1,70 +1,117 @@
-#include "Arduino.h"
-#include "LoRa_E220.h"
+#include <Arduino.h>
 #include <TinyGPSPlus.h>
 #include <HardwareSerial.h>
+#include <WiFi.h>
+#include <esp_now.h>
 
-#define FREQUENCY_868
-#define DESTINATION_ADDL BROADCAST_ADDRESS
-#define TX_PIN 17
-#define RX_PIN 16
-#define AUX_PIN 4
-#define M0_PIN 2
-#define M1_PIN 15
-LoRa_E220 e220(RX_PIN, TX_PIN, &Serial2, AUX_PIN, M0_PIN, M1_PIN, UART_BPS_RATE_9600);
+const int RXPinGPS = 33;  // GPS TX -> ESP32 GPIO33
+const int TXPinGPS = 32;  // GPS RX -> ESP32 GPIO32
+const uint32_t GPSBaud = 9600;
+const uint32_t TX_INTERVAL_MS = 1000;
 
 TinyGPSPlus gps;
 HardwareSerial gpsSerial(1);
 
-const int RXPinGPS = 33;
-const int TXPinGPS = 32;
-const uint32_t GPSBaud = 9600;
-const int COM_CHAN = 69;
+uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+uint16_t sequenceNumber = 0;
+uint32_t lastTransmitMs = 0;
 
-struct GpsData {
-    float lat;
-    float lon;
-    float alt;
-    uint8_t sat;
+#pragma pack(push, 1)
+struct GpsNowPacket {
+  char magic[4];
+  uint8_t version;
+  uint8_t valid;
+  uint16_t seq;
+  double lat;
+  double lon;
+  float alt;
+  float hdop;
+  uint8_t sats;
+  uint32_t gpsChars;
+  uint32_t uptimeMs;
 };
+#pragma pack(pop)
+
+void setupEspNow() {
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  WiFi.setSleep(false);
+
+  if (esp_now_init() != ESP_OK) {
+    Serial.println(F("ESP-NOW init failed"));
+    return;
+  }
+
+  esp_now_peer_info_t peerInfo = {};
+  memcpy(peerInfo.peer_addr, broadcastAddress, 6);
+  peerInfo.channel = 0;
+  peerInfo.encrypt = false;
+
+  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+    Serial.println(F("ESP-NOW add broadcast peer failed"));
+    return;
+  }
+
+  Serial.print(F("ESP-NOW TX MAC: "));
+  Serial.println(WiFi.macAddress());
+}
+
+GpsNowPacket buildPacket() {
+  GpsNowPacket packet = {
+    {'G', 'P', 'N', '1'},
+    1,
+    gps.location.isValid() ? 1 : 0,
+    sequenceNumber++,
+    gps.location.isValid() ? gps.location.lat() : 0.0,
+    gps.location.isValid() ? gps.location.lng() : 0.0,
+    gps.altitude.isValid() ? (float)gps.altitude.meters() : 0.0f,
+    gps.hdop.isValid() ? (float)gps.hdop.hdop() : 0.0f,
+    gps.satellites.isValid() ? (uint8_t)gps.satellites.value() : 0,
+    gps.charsProcessed(),
+    millis()
+  };
+  return packet;
+}
 
 void setup() {
-    gpsSerial.begin(GPSBaud, SERIAL_8N1, RXPinGPS, TXPinGPS);
-    Serial.begin(115200);
+  Serial.begin(115200);
+  delay(500);
+  Serial.println(F("ESP32 GPS -> ESP-NOW TX"));
+  Serial.println(F("GPS UART: RX=33 TX=32 baud=9600"));
 
-    e220.begin();
-    ResponseStructContainer c = e220.getConfiguration();
-    Configuration config = *(Configuration*)c.data;
-    config.ADDL = BROADCAST_ADDRESS;
-    config.ADDH = BROADCAST_ADDRESS;
-    config.CHAN = COM_CHAN;
-    config.SPED.uartBaudRate = UART_BPS_9600;
-    config.SPED.airDataRate = AIR_DATA_RATE_010_24;
-    config.SPED.uartParity = MODE_00_8N1;
-    config.OPTION.subPacketSetting = SPS_200_00;
-    config.OPTION.RSSIAmbientNoise = RSSI_AMBIENT_NOISE_DISABLED;
-    config.OPTION.transmissionPower = POWER_22;
-    config.TRANSMISSION_MODE.fixedTransmission = FT_FIXED_TRANSMISSION;
-    config.TRANSMISSION_MODE.enableRSSI = RSSI_DISABLED;
-    config.TRANSMISSION_MODE.enableLBT = LBT_DISABLED;
-    config.TRANSMISSION_MODE.WORPeriod = WOR_2000_011;
-    e220.setConfiguration(config, WRITE_CFG_PWR_DWN_SAVE);
-    c.close();
+  gpsSerial.begin(GPSBaud, SERIAL_8N1, RXPinGPS, TXPinGPS);
+  setupEspNow();
 }
 
 void loop() {
-    while (gpsSerial.available()) {
-        gps.encode(gpsSerial.read());
-    }
+  while (gpsSerial.available()) {
+    gps.encode(gpsSerial.read());
+  }
 
-    if (gps.location.isUpdated()) {
-        GpsData data;
-        data.lat = gps.location.lat();
-        data.lon = gps.location.lng();
-        data.alt = gps.altitude.meters();
-        data.sat = gps.satellites.value();
+  const uint32_t now = millis();
+  if (now - lastTransmitMs < TX_INTERVAL_MS) {
+    return;
+  }
+  lastTransmitMs = now;
 
-        ResponseStatus rs = e220.sendFixedMessage(0, DESTINATION_ADDL, COM_CHAN, &data, sizeof(GpsData));
-        Serial.print(F("Send status: ")); Serial.println(rs.getResponseDescription());
-        delay(1000);
-    }
+  GpsNowPacket packet = buildPacket();
+  esp_err_t result = esp_now_send(broadcastAddress, (const uint8_t*)&packet, sizeof(packet));
+
+  Serial.print(F("TX seq="));
+  Serial.print(packet.seq);
+  Serial.print(F(" result="));
+  Serial.print(result == ESP_OK ? F("OK") : F("ERR"));
+  Serial.print(F(" valid="));
+  Serial.print(packet.valid);
+  Serial.print(F(" sats="));
+  Serial.print(packet.sats);
+  Serial.print(F(" chars="));
+  Serial.print(packet.gpsChars);
+  if (packet.valid) {
+    Serial.print(F(" lat="));
+    Serial.print(packet.lat, 6);
+    Serial.print(F(" lon="));
+    Serial.print(packet.lon, 6);
+  }
+  Serial.println();
 }

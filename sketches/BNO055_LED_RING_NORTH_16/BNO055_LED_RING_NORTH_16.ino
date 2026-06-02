@@ -29,7 +29,7 @@ const bool INDEX_INCREASES_CLOCKWISE = false;
 const uint32_t SERIAL_PRINT_INTERVAL_MS = 250;
 const uint32_t LOOP_DELAY_MS = 30;
 const uint32_t TARGET_BREATH_PERIOD_MS = 4000;  // 0.25 Hz = one full breath every 4 seconds
-const float TARGET_MAX_BRIGHTNESS = 0.05f;
+const float TARGET_MAX_BRIGHTNESS = 0.10f;
 
 // LED colors (GRB order handled by library)
 const uint32_t COLOR_NORTH = 0x1A0000;   // 10% red
@@ -52,7 +52,7 @@ struct TargetDevice {
 const TargetDevice TARGETS[] = {
   {"green", 47.963525, 16.196262, 0, 255, 0},
   {"blue", 47.963028, 16.196205, 0, 0, 255},
-  {"purple", 47.963547, 16.197616, 180, 0, 255},
+  {"purple", 48.058409, 16.075570, 180, 0, 255},
 };
 const int TARGET_COUNT = sizeof(TARGETS) / sizeof(TARGETS[0]);
 
