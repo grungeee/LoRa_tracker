@@ -20,6 +20,9 @@ float readHeading() {
   return h;
 }
 
+
+
+
 void setup() {
   Serial.begin(115200);
   if (!bno.begin()) {
@@ -27,12 +30,21 @@ void setup() {
     while (1);
   }
   bno.setExtCrystalUse(true);
+
+  uint8_t system, gyro, accel, mag;
+  bno.getCalibration(&system, &gyro, &accel, &mag);
+  Serial.print("magnetometer cal: ");
+  Serial.println(mag); // 0-3, where 3 = fully calibrated
+
+  startHeading = readHeading();
+
   initLCD();
   delay(100); // allow sensor to stabilize
-  startHeading = readHeading();
+
 }
 
 void loop() {
+
   float h = readHeading();
   displayCompass(h, startHeading);
   displayHeading(h);

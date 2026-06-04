@@ -15,9 +15,9 @@ extern Adafruit_GC9A01A tft;
 
 void initLCD();
 void clearLCD();
-void initCalibrationBNO();
-void displayCompass(float heading, float startHeading);
-void displayCompassArrow(float heading, float startHeading);
-
+void displayGPSData(float latitude, float longitude, float altitude, int satellites);
+void displayNoGPSData();
+void displayText();
+void bootAnimation();
 
 #endif 

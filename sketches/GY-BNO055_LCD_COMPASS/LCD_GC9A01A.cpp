@@ -14,7 +14,10 @@ void clearLCD() {
   tft.fillScreen(GC9A01A_BLACK);
 }
 
-void displayCompass(float heading, float startHeading) {
+
+
+void displayCompassArrow(float heading, float startHeading) {
+  tft.setTextSize(2);
   clearLCD();
 
   int16_t x1, y1;
@@ -77,8 +80,12 @@ void displayCompass(float heading, float startHeading) {
   tft.drawLine(cx, cy, nx, ny, northColor);
   tft.drawLine(cx, cy, ax, ay, needleColor);
 
+  tft.setTextSize(1);
   String text = String(heading, 1) + " deg";
   tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
   tft.setCursor((240 - w) / 2, cy + radius + 20);
   tft.print(text);
 }
+//---------------
+
+
