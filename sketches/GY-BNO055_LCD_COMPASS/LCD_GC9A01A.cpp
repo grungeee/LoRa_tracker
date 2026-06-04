@@ -19,18 +19,66 @@ void clearLCD() {
 void displayCompassArrow(float heading, float startHeading) {
   tft.setTextSize(2);
   clearLCD();
+
   int16_t x1, y1;
   uint16_t w, h;
 
+  // Draw compass circle and labels
+  tft.setTextSize(2);
   int cx = 120;
   int cy = 120;
   int radius = 80;
-  // Arrow to the starting heading
-  float arrowAngle = (startHeading - heading) * 0.01745329251;
+  tft.drawCircle(cx, cy, radius, GC9A01A_WHITE);
+
+  // rotate the compass labels so north stays at the top
+  struct { const char *label; float angle; } labels[4] = {
+    {"N", 0}, {"E", 90}, {"S", 180}, {"W", 270}
+  };
+
+  for (auto &l : labels) {
+    float a = (l.angle - heading) * 0.01745329251;
+    int tx = cx + (int)((radius + 12) * sin(a)) - 4;
+    int ty = cy - (int)((radius + 12) * cos(a)) + 4;
+    tft.setCursor(tx, ty);
+    tft.print(l.label);
+  }
+
+  // Arrow indicating magnetic north
+  tft.setCursor(cx-5, cy-radius-20);
+  tft.print("N");
+  tft.setCursor(cx+radius+10, cy-3);
+  tft.print("E");
+  tft.setCursor(cx-3, cy+radius+5);
+  tft.print("S");
+  tft.setCursor(cx-radius-20, cy-3);
+  tft.print("W");
+
+  // Draw heading arrow
+  tft.setTextSize(1);
+  float angle = heading * 0.01745329251; // DEG_TO_RAD
   int len = radius - 10;
-  int x2 = cx + (int)(len * sin(arrowAngle));
-  int y2 = cy - (int)(len * cos(arrowAngle));
-  tft.drawLine(cx, cy, x2, y2, GC9A01A_RED);
+  int nx = cx;
+  int ny = cy - len;
+  uint16_t northColor = GC9A01A_YELLOW;
+
+  // Arrow that starts at boot and rotates with the device
+  float arrowAngle = (startHeading - heading) * 0.01745329251;
+  int ax = cx + (int)(len * sin(arrowAngle));
+  int ay = cy - (int)(len * cos(arrowAngle));
+
+  float diff = fabs(startHeading - heading);
+  if (diff > 180.0f) {
+    diff = 360.0f - diff;
+  }
+
+  uint16_t needleColor = GC9A01A_RED;
+  if (diff < 5.0f) {
+    northColor = GC9A01A_GREEN;
+    needleColor = GC9A01A_GREEN;
+  }
+
+  tft.drawLine(cx, cy, nx, ny, northColor);
+  tft.drawLine(cx, cy, ax, ay, needleColor);
 
   tft.setTextSize(1);
   String text = String(heading, 1) + " deg";
