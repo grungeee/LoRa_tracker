@@ -1,0 +1,10 @@
+{
+  "description": "sos_remote: a received SOS packet changes policy state and LED intent only",
+  "events": [
+    {"type": "remote_packet", "node": 77, "sequence": 3, "sos": true, "at_ms": 1000}
+  ],
+  "expected_actions": [
+    {"type": "sos_on", "target": 77},
+    {"type": "update_led", "mode": "sos"}
+  ]
+}

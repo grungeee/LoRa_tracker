@@ -1,0 +1,11 @@
+{
+  "description": "dancing_no_position_spam: motion updates do not force position broadcasts without a GNSS fix",
+  "events": [
+    {"type": "motion", "moving": true, "at_ms": 1000},
+    {"type": "motion", "moving": true, "at_ms": 1500},
+    {"type": "motion", "moving": true, "at_ms": 2000}
+  ],
+  "expected_actions": [
+    {"type": "update_led", "mode": "locating"}
+  ]
+}

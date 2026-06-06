@@ -1,0 +1,12 @@
+{
+  "description": "node_reappears: a remote node disappears from the table and later returns with a newer sequence",
+  "events": [
+    {"type": "remote_packet", "node": 42, "sequence": 1, "at_ms": 1000},
+    {"type": "tick", "at_ms": 70000},
+    {"type": "remote_packet", "node": 42, "sequence": 2, "at_ms": 71000}
+  ],
+  "expected_actions": [
+    {"type": "store_table", "reason": "new remote node"},
+    {"type": "store_table", "reason": "node returned"}
+  ]
+}

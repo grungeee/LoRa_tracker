@@ -1,0 +1,11 @@
+{
+  "description": "flashlight_timeout: a local flashlight request is represented without touching LED hardware",
+  "events": [
+    {"type": "button", "pattern": "long_press", "at_ms": 1000},
+    {"type": "tick", "at_ms": 61000}
+  ],
+  "expected_actions": [
+    {"type": "update_led", "mode": "flashlight"},
+    {"type": "update_led", "mode": "idle"}
+  ]
+}

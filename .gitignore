@@ -1,0 +1,6 @@
+# Local assistant metadata
+.antigravitycli/
+.codex/
+
+# Native build output
+build/

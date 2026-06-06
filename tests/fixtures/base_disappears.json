@@ -1,0 +1,10 @@
+{
+  "description": "base_disappears: the base node ages out when no packets arrive inside the retention window",
+  "events": [
+    {"type": "remote_packet", "node": 1, "sequence": 10, "at_ms": 1000},
+    {"type": "tick", "at_ms": 120000}
+  ],
+  "expected_actions": [
+    {"type": "store_table", "reason": "expired node removed"}
+  ]
+}
